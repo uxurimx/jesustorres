@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jesús Torres</title>
+<title>JT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -12,7 +12,6 @@
   :root {
     --black: #000000;
     --white: #FFFFFF;
-    --dim: rgba(255,255,255,0.08);
     --dim2: rgba(255,255,255,0.04);
     --line: rgba(255,255,255,0.12);
     --muted: rgba(255,255,255,0.35);
@@ -32,595 +31,372 @@
     cursor: crosshair;
   }
 
-  /* NOISE OVERLAY */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.6;
+    pointer-events: none; z-index: 9999; opacity: 0.6;
   }
 
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 2px; }
   ::-webkit-scrollbar-track { background: #000; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); }
 
-  /* NAV */
+  /* ── LANG SYSTEM ── */
+  [data-lang] { display: none; }
+  body.en [data-lang="en"] { display: initial; }
+  body.es [data-lang="es"] { display: initial; }
+  [data-lang-block] { display: none; }
+  body.en [data-lang-block="en"] { display: block; }
+  body.es [data-lang-block="es"] { display: block; }
+
+  .lang-toggle {
+    display: flex; align-items: center;
+    border: 1px solid var(--line); overflow: hidden;
+  }
+  .lang-btn {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+    padding: 6px 14px; background: transparent; border: none;
+    color: var(--muted); cursor: pointer;
+    transition: background 0.2s, color 0.2s; text-transform: uppercase;
+  }
+  .lang-btn.active { background: var(--white); color: var(--black); }
+  .lang-sep { width: 1px; height: 28px; background: var(--line); }
+
+  /* ── NAV ── */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
     padding: 24px 48px;
     border-bottom: 1px solid transparent;
     transition: border-color 0.4s, background 0.4s;
   }
   nav.scrolled {
     border-color: var(--line);
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.88);
     backdrop-filter: blur(12px);
   }
   .nav-logo {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.2em; color: var(--muted);
+    text-transform: uppercase; cursor: default;
   }
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
   .nav-links a {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--white); }
 
-  /* HERO */
+  /* ── HERO ── */
   #hero {
     min-height: 100vh;
-    display: grid;
-    grid-template-rows: 1fr auto;
+    display: grid; grid-template-rows: 1fr auto;
     padding: 0 48px 48px;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
-
-  /* Grid lines background */
   .grid-bg {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background-image:
       linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
     background-size: 80px 80px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
   }
-
-  /* Radial glow */
   .hero-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+    position: absolute; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.035) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; transition: transform 0.6s ease;
   }
-
   .hero-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 120px;
-    position: relative;
-    z-index: 2;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 120px; position: relative; z-index: 2;
   }
-
   .hero-eyebrow {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.4em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.4em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
   }
-
   .hero-name {
     font-family: var(--display);
     font-size: clamp(72px, 12vw, 180px);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
+    line-height: 0.9; letter-spacing: 0.02em;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    cursor: default; user-select: none;
   }
-  .hero-name span {
-    display: block;
-  }
-  .hero-name .last {
-    color: var(--muted);
-  }
-
+  .hero-name span { display: block; }
+  .hero-name .last { color: var(--muted); }
   .hero-statement {
-    margin-top: 48px;
-    max-width: 520px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
+    margin-top: 48px; max-width: 520px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
   }
-  .hero-statement p {
-    font-size: 18px;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.7);
-    font-weight: 300;
-  }
-  .hero-statement .es {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 12px;
-    font-style: italic;
-  }
-
+  .hero-statement p { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.7); font-weight: 300; }
   .hero-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    position: relative;
-    z-index: 2;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.9s forwards;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    position: relative; z-index: 2;
+    opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
   }
 
+  /* EASTER EGG 1: coords hover reveal */
   .hero-coords {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    line-height: 1.8;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--muted); letter-spacing: 0.15em; line-height: 1.8;
+    cursor: default;
   }
+  .coord-extra {
+    font-size: 9px; color: rgba(255,255,255,0.05);
+    letter-spacing: 0.12em; margin-top: 4px;
+    transition: color 0.6s;
+  }
+  .hero-coords:hover .coord-extra { color: rgba(255,255,255,0.22); }
 
-  .scroll-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
+  .scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 8px; }
   .scroll-indicator span {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    color: var(--muted);
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em;
+    color: var(--muted); text-transform: uppercase; writing-mode: vertical-rl;
   }
   .scroll-line {
-    width: 1px;
-    height: 60px;
+    width: 1px; height: 60px;
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3));
     animation: scrollPulse 2s ease-in-out infinite;
   }
 
-  /* SECTION BASE */
-  section {
-    padding: 120px 48px;
-    border-top: 1px solid var(--line);
-  }
-
+  /* ── SECTIONS ── */
+  section { padding: 120px 48px; border-top: 1px solid var(--line); }
   .section-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 64px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 64px;
+    display: flex; align-items: center; gap: 16px;
   }
   .section-label::after {
-    content: '';
-    flex: 1;
-    max-width: 80px;
-    height: 1px;
-    background: var(--line);
+    content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--line);
   }
 
-  /* STATEMENT SECTION */
-  #statement {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-
+  /* ── STATEMENT ── */
+  #statement { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .statement-left h2 {
-    font-family: var(--display);
-    font-size: clamp(48px, 6vw, 96px);
-    line-height: 1;
-    letter-spacing: 0.02em;
+    font-family: var(--display); font-size: clamp(48px, 6vw, 96px);
+    line-height: 1; letter-spacing: 0.02em;
   }
+  .statement-right p { font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
+  .statement-right .highlight { color: var(--white); font-weight: 500; }
+  .lang-bar { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+  .lang-item { display: flex; flex-direction: column; gap: 8px; }
+  .lang-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .lang-level { display: flex; gap: 4px; }
+  .lang-dot { width: 20px; height: 2px; background: var(--line); }
+  .lang-dot.filled { background: var(--white); }
 
-  .statement-right p {
-    font-size: 16px;
-    line-height: 1.9;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 24px;
-  }
-  .statement-right .highlight {
-    color: var(--white);
-    font-weight: 500;
-  }
-
-  /* SYSTEMS */
-  #systems {
-    overflow: hidden;
-  }
-
+  /* ── SYSTEMS ── */
   .systems-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
   }
-
   .system-cell {
-    background: var(--black);
-    padding: 48px 40px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-    cursor: default;
+    background: var(--black); padding: 48px 40px;
+    position: relative; overflow: hidden; transition: background 0.3s; cursor: default;
   }
-
   .system-cell::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--dim2);
-    opacity: 0;
-    transition: opacity 0.3s;
+    content: ''; position: absolute; inset: 0;
+    background: var(--dim2); opacity: 0; transition: opacity 0.3s;
   }
   .system-cell:hover::before { opacity: 1; }
-
-  .system-number {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    margin-bottom: 32px;
-    display: block;
+  /* EASTER EGG 2: binary code appears on hover */
+  .system-cell::after {
+    content: attr(data-binary);
+    position: absolute; bottom: 14px; left: 40px;
+    font-family: var(--mono); font-size: 8px;
+    color: rgba(255,255,255,0.04); letter-spacing: 0.05em;
+    transition: color 0.5s; pointer-events: none;
   }
+  .system-cell:hover::after { color: rgba(255,255,255,0.2); }
+  .system-number { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 32px; display: block; }
+  .system-title { font-family: var(--display); font-size: 36px; letter-spacing: 0.05em; line-height: 1; margin-bottom: 16px; }
+  .system-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
+  .system-tag { position: absolute; top: 24px; right: 24px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: rgba(255,255,255,0.12); text-transform: uppercase; }
 
-  .system-title {
-    font-family: var(--display);
-    font-size: 36px;
-    letter-spacing: 0.05em;
-    line-height: 1;
-    margin-bottom: 16px;
+  /* ── PHILOSOPHY ── */
+  #philosophy { text-align: center; padding: 160px 48px; position: relative; }
+  /* EASTER EGG 3: comment appears on hover */
+  #philosophy::after {
+    content: '// el sistema más difícil de compilar eres tú mismo';
+    position: absolute; bottom: 28px; right: 48px;
+    font-family: var(--mono); font-size: 9px;
+    color: rgba(255,255,255,0.03); letter-spacing: 0.15em;
+    transition: color 0.6s; pointer-events: none;
   }
-
-  .system-desc {
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  .system-tag {
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.2);
-    text-transform: uppercase;
-  }
-
-  /* PHILOSOPHY */
-  #philosophy {
-    text-align: center;
-    padding: 160px 48px;
-  }
-
+  #philosophy:hover::after { color: rgba(255,255,255,0.22); }
   .philosophy-quote {
-    font-family: var(--display);
-    font-size: clamp(32px, 5vw, 72px);
-    letter-spacing: 0.05em;
-    line-height: 1.2;
-    max-width: 900px;
-    margin: 0 auto 48px;
+    font-family: var(--display); font-size: clamp(32px, 5vw, 72px);
+    letter-spacing: 0.05em; line-height: 1.2; max-width: 900px; margin: 0 auto 48px;
   }
-
   .philosophy-sub {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.2em;
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.8;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: 0.2em; max-width: 500px; margin: 0 auto; line-height: 1.8;
   }
 
-  /* ORBIT / PROJECTS */
-  #orbit .projects-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
+  /* ── ORBIT ── */
+  .projects-list { display: flex; flex-direction: column; }
   .project-row {
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    align-items: center;
-    gap: 40px;
-    padding: 32px 0;
-    border-bottom: 1px solid var(--line);
-    transition: background 0.2s;
-    cursor: default;
-    position: relative;
+    display: grid; grid-template-columns: 80px 1fr auto;
+    align-items: center; gap: 40px;
+    padding: 32px 0; border-bottom: 1px solid var(--line);
+    cursor: default; position: relative; transition: padding-left 0.25s;
   }
+  .project-row:hover { padding-left: 8px; }
+  /* EASTER EGG 4: morse on hover */
   .project-row::after {
-    content: '→';
-    position: absolute;
-    right: 0;
-    font-size: 18px;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: opacity 0.2s, transform 0.2s;
+    content: attr(data-morse);
+    position: absolute; right: 140px;
+    font-family: var(--mono); font-size: 8px;
+    color: rgba(255,255,255,0.04); letter-spacing: 0.1em;
+    transition: color 0.5s; pointer-events: none;
   }
-  .project-row:hover::after {
-    opacity: 0.4;
-    transform: translateX(0);
-  }
-
-  .project-num {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: rgba(255,255,255,0.2);
-    letter-spacing: 0.2em;
-  }
-
-  .project-info h3 {
-    font-family: var(--display);
-    font-size: 28px;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-  }
-  .project-info p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-
+  .project-row:hover::after { color: rgba(255,255,255,0.18); }
+  .project-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.2em; }
+  .project-info h3 { font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .project-info p { font-size: 13px; color: var(--muted); }
   .project-status {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border: 1px solid var(--line);
-    color: var(--muted);
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 6px 14px;
+    border: 1px solid var(--line); color: var(--muted); flex-shrink: 0;
   }
-  .project-status.active {
-    border-color: rgba(255,255,255,0.3);
-    color: var(--white);
-  }
+  .project-status.active { border-color: rgba(255,255,255,0.3); color: var(--white); }
 
-  /* LANGUAGES */
-  .lang-bar {
-    display: flex;
-    gap: 40px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-  }
-  .lang-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .lang-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .lang-level {
-    display: flex;
-    gap: 4px;
-  }
-  .lang-dot {
-    width: 20px;
-    height: 2px;
-    background: var(--line);
-  }
-  .lang-dot.filled {
-    background: var(--white);
-  }
-
-  /* SIGNAL / CONTACT */
-  #signal {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .signal-left h2 {
-    font-family: var(--display);
-    font-size: clamp(48px, 6vw, 96px);
-    line-height: 1;
-    letter-spacing: 0.02em;
-    margin-bottom: 32px;
-  }
-  .signal-left p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.55);
-    max-width: 380px;
-  }
-
-  .signal-right {
-    padding-top: 8px;
-  }
-
+  /* ── SIGNAL ── */
+  #signal { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .signal-left h2 { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; margin-bottom: 32px; }
+  .signal-left p { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.55); max-width: 380px; }
   .contact-line {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
+    display: flex; align-items: center; gap: 24px;
+    padding: 28px 0; border-bottom: 1px solid var(--line);
+    text-decoration: none; color: inherit;
     transition: opacity 0.2s;
-    text-decoration: none;
-    color: inherit;
   }
-  .contact-line:hover { opacity: 0.6; }
+  .contact-line:hover { opacity: 0.5; }
+  .contact-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .contact-value { font-size: 16px; font-weight: 400; }
 
-  .contact-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    width: 80px;
-    flex-shrink: 0;
-  }
-  .contact-value {
-    font-family: var(--body);
-    font-size: 16px;
-    font-weight: 400;
-  }
+  /* ── MARQUEE ── */
+  .marquee-section { padding: 32px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .marquee-track { display: flex; animation: marquee 24s linear infinite; white-space: nowrap; }
+  .marquee-track span { font-family: var(--display); font-size: 14px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; padding: 0 48px; }
+  .marquee-track span.sep { color: rgba(255,255,255,0.12); padding: 0; }
 
-  /* FOOTER */
-  footer {
-    padding: 48px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  /* ── FOOTER ── */
+  footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
+  footer p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.2); }
+  /* EASTER EGG 5: footer invisible message */
+  .footer-egg {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 8px;
+    color: rgba(255,255,255,0.03); letter-spacing: 0.18em;
+    white-space: nowrap; cursor: default; user-select: none;
+    transition: color 0.7s;
   }
-  footer p {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: rgba(255,255,255,0.2);
-  }
+  .footer-egg:hover { color: rgba(255,255,255,0.28); }
 
-  /* MARQUEE */
-  .marquee-section {
-    padding: 32px 0;
-    overflow: hidden;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
+  /* ── TERMINAL OVERLAY ── */
+  #terminal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95); z-index: 9000;
+    padding: 80px 48px; backdrop-filter: blur(4px);
   }
-  .marquee-track {
-    display: flex;
-    animation: marquee 20s linear infinite;
-    white-space: nowrap;
+  #terminal-overlay.open { display: flex; flex-direction: column; justify-content: center; }
+  .term-header { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 0.3em; margin-bottom: 40px; }
+  .term-line {
+    font-family: var(--mono); font-size: 14px; color: var(--white);
+    letter-spacing: 0.05em; line-height: 2.2; opacity: 0;
+    animation: fadeIn 0.05s forwards;
   }
-  .marquee-track span {
-    font-family: var(--display);
-    font-size: 14px;
-    letter-spacing: 0.3em;
-    color: var(--muted);
-    text-transform: uppercase;
-    padding: 0 48px;
+  .term-line .prompt { color: rgba(255,255,255,0.28); margin-right: 12px; }
+  .term-close {
+    position: absolute; top: 32px; right: 48px;
+    font-family: var(--mono); font-size: 10px; color: var(--muted);
+    letter-spacing: 0.2em; cursor: pointer; background: none;
+    border: 1px solid var(--line); padding: 8px 16px; transition: color 0.2s;
   }
-  .marquee-track span.sep {
-    color: rgba(255,255,255,0.15);
-    padding: 0;
-  }
+  .term-close:hover { color: var(--white); }
 
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes scrollPulse {
-    0%, 100% { opacity: 0.3; }
-    50%       { opacity: 1; }
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes fadeIn { to { opacity: 1; } }
 
-  /* Reveal on scroll */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s, transform 0.7s;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: none; }
 
-  /* MOBILE */
   @media (max-width: 768px) {
     nav { padding: 20px 24px; }
-    .nav-links { display: none; }
+    .nav-links { gap: 16px; }
     #hero { padding: 0 24px 40px; }
     section { padding: 80px 24px; }
     #statement, #signal { grid-template-columns: 1fr; gap: 48px; }
     .systems-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 16px; text-align: center; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .project-row { grid-template-columns: 40px 1fr auto; gap: 12px; }
   }
 </style>
 </head>
-<body>
+<body class="en">
+
+<!-- TERMINAL -->
+<div id="terminal-overlay">
+  <button class="term-close" onclick="closeTerminal()">[ ESC ]</button>
+  <div class="term-header" id="term-header"></div>
+  <div id="term-content"></div>
+</div>
 
 <!-- NAV -->
 <nav id="navbar">
-  <span class="nav-logo">JT — jesustorres.dev</span>
+  <span class="nav-logo" title="// node initialized">JT — ████████.dev</span>
   <ul class="nav-links">
-    <li><a href="#systems">Systems</a></li>
-    <li><a href="#philosophy">Philosophy</a></li>
-    <li><a href="#orbit">Orbit</a></li>
+    <li><a href="#systems" data-lang="en">Systems</a><a href="#systems" data-lang="es">Sistemas</a></li>
+    <li><a href="#philosophy" data-lang="en">Philosophy</a><a href="#philosophy" data-lang="es">Filosofía</a></li>
+    <li><a href="#orbit" data-lang="en">Orbit</a><a href="#orbit" data-lang="es">Órbita</a></li>
     <li><a href="#signal">Signal</a></li>
+    <li>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <div class="lang-sep"></div>
+        <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+      </div>
+    </li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="grid-bg"></div>
-  <div class="hero-glow"></div>
-
+  <div class="hero-glow" id="glow"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Builder · Trader · Architect · 38° N</p>
-
-    <h1 class="hero-name">
+    <p class="hero-eyebrow">
+      <span data-lang="en">Builder · Trader · Architect · Node_38</span>
+      <span data-lang="es">Constructor · Trader · Arquitecto · Nodo_38</span>
+    </p>
+    <h1 class="hero-name" id="hero-name">
       <span class="first">JESÚS</span>
       <span class="last">TORRES</span>
     </h1>
-
     <div class="hero-statement">
-      <p>I build systems. Everything else is consequence.</p>
-      <p class="es">Construyo sistemas. El resto es consecuencia.</p>
+      <p data-lang-block="en">I build systems. Everything else is consequence.</p>
+      <p data-lang-block="es">Construyo sistemas. El resto es consecuencia.</p>
     </div>
   </div>
-
   <div class="hero-bottom">
+    <!-- EASTER EGG 1: hover coords -->
     <div class="hero-coords">
-      <div>24.0277° N, 104.6532° W</div>
-      <div>Durango, México</div>
+      <div>24.0277° N</div>
+      <div>104.6532° W</div>
+      <div class="coord-extra">ALT 1889m · TZ UTC-6 · // sector: known</div>
     </div>
     <div class="scroll-indicator">
-      <span>Scroll</span>
+      <span data-lang="en">Scroll</span>
+      <span data-lang="es">Bajar</span>
       <div class="scroll-line"></div>
     </div>
   </div>
@@ -638,6 +414,7 @@
     <span>Self Mastery</span><span class="sep"> / </span>
     <span>Ciberseguridad</span><span class="sep"> / </span>
     <span>Quantum Tech</span><span class="sep"> / </span>
+    <span>38 años</span><span class="sep"> / </span>
     <span>Trading Bots</span><span class="sep"> / </span>
     <span>Blockchain</span><span class="sep"> / </span>
     <span>Web3</span><span class="sep"> / </span>
@@ -647,6 +424,7 @@
     <span>Self Mastery</span><span class="sep"> / </span>
     <span>Ciberseguridad</span><span class="sep"> / </span>
     <span>Quantum Tech</span><span class="sep"> / </span>
+    <span>38 años</span><span class="sep"> / </span>
   </div>
 </div>
 
@@ -654,59 +432,21 @@
 <section>
   <div id="statement">
     <div class="statement-left reveal">
-      <div class="section-label">00 — Manifiesto</div>
-      <h2>THE WORLD<br>IS HOME</h2>
+      <div class="section-label">
+        <span data-lang="en">00 — Manifesto</span>
+        <span data-lang="es">00 — Manifiesto</span>
+      </div>
+      <h2 data-lang-block="en">THE<br>WORLD<br>IS HOME</h2>
+      <h2 data-lang-block="es">EL<br>MUNDO<br>ES CASA</h2>
     </div>
     <div class="statement-right reveal">
-      <p>
-        I see the world as <span class="highlight">my home</span> — a beautiful place to improve, to help, to experience deeply and explore without limits. Not a battlefield. Not a race. A living system I'm part of and choose to make better.
-      </p>
-      <p>
-        Veo el mundo como <span class="highlight">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar. Eso es lo que construye lo que construyo.
-      </p>
-
-      <!-- Languages -->
+      <p data-lang-block="en">I see the world as <span class="highlight">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I'm part of and choose to make better.</p>
+      <p data-lang-block="es">Veo el mundo como <span class="highlight">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar sin límites. No es una batalla. No es una carrera. Es un sistema vivo del que formo parte y elijo mejorar.</p>
       <div class="lang-bar">
-        <div class="lang-item">
-          <span class="lang-label">Español</span>
-          <div class="lang-level">
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-          </div>
-        </div>
-        <div class="lang-item">
-          <span class="lang-label">English</span>
-          <div class="lang-level">
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-          </div>
-        </div>
-        <div class="lang-item">
-          <span class="lang-label">Deutsch</span>
-          <div class="lang-level">
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-          </div>
-        </div>
-        <div class="lang-item">
-          <span class="lang-label">中文</span>
-          <div class="lang-level">
-            <div class="lang-dot filled"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-            <div class="lang-dot"></div>
-          </div>
-        </div>
+        <div class="lang-item"><span class="lang-label">ES</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div></div></div>
+        <div class="lang-item"><span class="lang-label">EN</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
+        <div class="lang-item"><span class="lang-label">DE</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
+        <div class="lang-item"><span class="lang-label">中文</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
       </div>
     </div>
   </div>
@@ -714,42 +454,51 @@
 
 <!-- SYSTEMS -->
 <section id="systems">
-  <div class="section-label reveal">01 — Sistemas</div>
+  <div class="section-label reveal">
+    <span data-lang="en">01 — Systems</span>
+    <span data-lang="es">01 — Sistemas</span>
+  </div>
   <div class="systems-grid">
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01110100 01110010 01100001 01100100 01100101">
       <span class="system-number">01.01</span>
       <h3 class="system-title">TRADING<br>& BOTS</h3>
-      <p class="system-desc">Active trader on Bybit. Building AI-powered bots that operate autonomously in financial markets. Turning market chaos into executable logic.</p>
+      <p class="system-desc" data-lang-block="en">Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.</p>
+      <p class="system-desc" data-lang-block="es">Trader activo en Bybit. Construyendo bots con IA que operan autónomamente. Caos de mercado convertido en lógica ejecutable.</p>
       <span class="system-tag">Finanzas</span>
     </div>
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01110111 01100101 01100010 00110011">
       <span class="system-number">01.02</span>
       <h3 class="system-title">WEB3<br>BLOCKCHAIN</h3>
-      <p class="system-desc">Tokens, smart contracts, decentralized systems. Building on the infrastructure of the next financial paradigm before it becomes mainstream.</p>
+      <p class="system-desc" data-lang-block="en">Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.</p>
+      <p class="system-desc" data-lang-block="es">Tokens, contratos inteligentes, sistemas descentralizados. Construyendo antes de que sea tendencia.</p>
       <span class="system-tag">Web3</span>
     </div>
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01101100 01101001 01101110 01110101 01111000">
       <span class="system-number">01.03</span>
       <h3 class="system-title">LINUX<br>OS DEV</h3>
-      <p class="system-desc">Custom Linux operating system for multiple devices. Private networks, security-first architecture. Own your stack, own your freedom.</p>
+      <p class="system-desc" data-lang-block="en">Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.</p>
+      <p class="system-desc" data-lang-block="es">OS personalizado multi-dispositivo. Redes privadas, seguridad de base. Posee tu stack — posee tu libertad.</p>
       <span class="system-tag">Sistemas</span>
     </div>
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01101000 01101111 01101101 01100101">
       <span class="system-number">01.04</span>
       <h3 class="system-title">DOMÓTICA<br>& IOT</h3>
-      <p class="system-desc">Electronic systems that make physical spaces intelligent. From sensors to automation — environments that respond, adapt, and protect.</p>
+      <p class="system-desc" data-lang-block="en">Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.</p>
+      <p class="system-desc" data-lang-block="es">Sistemas electrónicos que hacen los espacios inteligentes. De sensores a automatización — entornos que protegen.</p>
       <span class="system-tag">Electrónica</span>
     </div>
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01110011 01100101 01100011 01110101 01110010 01100101">
       <span class="system-number">01.05</span>
       <h3 class="system-title">CYBER<br>SECURITY</h3>
-      <p class="system-desc">Security is not a feature. It's a foundation. Building and contributing to systems where privacy and integrity are non-negotiable defaults.</p>
+      <p class="system-desc" data-lang-block="en">Security is not a feature. It's a foundation. Privacy and integrity as non-negotiable defaults.</p>
+      <p class="system-desc" data-lang-block="es">La seguridad no es una función. Es la base. Privacidad e integridad como valores predeterminados innegociables.</p>
       <span class="system-tag">Seguridad</span>
     </div>
-    <div class="system-cell reveal">
+    <div class="system-cell reveal" data-binary="01110011 01100101 01101100 01100110">
       <span class="system-number">01.06</span>
       <h3 class="system-title">SELF<br>MASTERY</h3>
-      <p class="system-desc">Casi 2 años de desarrollo personal. Saltos cuánticos, despertares reales. El sistema más complejo que construyo soy yo mismo.</p>
+      <p class="system-desc" data-lang-block="en">~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.</p>
+      <p class="system-desc" data-lang-block="es">~2 años de desarrollo personal. Saltos cuánticos. Despertares reales. El sistema más complejo que construyo soy yo mismo.</p>
       <span class="system-tag">Humano</span>
     </div>
   </div>
@@ -758,57 +507,66 @@
 <!-- PHILOSOPHY -->
 <section id="philosophy">
   <p class="philosophy-quote reveal">
-    "SYSTEMS DON'T FAIL.<br>ARCHITECTS DO."
+    <span data-lang="en">"SYSTEMS DON'T FAIL.<br>ARCHITECTS DO."</span>
+    <span data-lang="es">"LOS SISTEMAS NO FALLAN.<br>LOS ARQUITECTOS SÍ."</span>
   </p>
   <p class="philosophy-sub reveal">
-    Every problem is an architecture problem.<br>
-    Every solution is a system waiting to be designed.
+    <span data-lang="en">Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.</span>
+    <span data-lang="es">Todo problema es un problema de arquitectura.<br>Toda solución es un sistema esperando ser diseñado.</span>
   </p>
 </section>
 
 <!-- ORBIT -->
-<section id="orbit" style="padding-top: 80px;">
-  <div class="section-label reveal">02 — Órbita Activa</div>
+<section id="orbit" style="padding-top:80px;">
+  <div class="section-label reveal">
+    <span data-lang="en">02 — Active Orbit</span>
+    <span data-lang="es">02 — Órbita Activa</span>
+  </div>
   <div class="projects-list reveal">
-    <div class="project-row">
+    <div class="project-row" data-morse="– · · · / · · / ·– / – –">
       <span class="project-num">001</span>
       <div class="project-info">
         <h3>TRADING BOT AI</h3>
-        <p>Autonomous trading system with machine learning signals — Bybit integration</p>
+        <p data-lang-block="en">Autonomous system with ML signals — Bybit integration</p>
+        <p data-lang-block="es">Sistema autónomo con señales ML — integración Bybit</p>
       </div>
-      <span class="project-status active">Active</span>
+      <span class="project-status active"><span data-lang="en">Active</span><span data-lang="es">Activo</span></span>
     </div>
-    <div class="project-row">
+    <div class="project-row" data-morse="·· / – / · / · · / ·–·">
       <span class="project-num">002</span>
       <div class="project-info">
         <h3>CYBERSECURITY FIRM</h3>
-        <p>Landing page live — seed planted. Team forming. Returning in 2 years.</p>
+        <p data-lang-block="en">Seed planted. Landing live. Team forming. Return: 2 years.</p>
+        <p data-lang-block="es">Semilla plantada. Landing en vivo. Equipo en formación. Regreso: 2 años.</p>
       </div>
-      <span class="project-status">Seeded</span>
+      <span class="project-status"><span data-lang="en">Seeded</span><span data-lang="es">Sembrado</span></span>
     </div>
-    <div class="project-row">
+    <div class="project-row" data-morse="·–·· / ·· / –· / · · ·">
       <span class="project-num">003</span>
       <div class="project-info">
         <h3>CUSTOM LINUX OS</h3>
-        <p>Multi-device operating system — private network ready, security native</p>
+        <p data-lang-block="en">Multi-device OS — private network ready, security native</p>
+        <p data-lang-block="es">OS multi-dispositivo — listo para redes privadas, seguridad nativa</p>
       </div>
-      <span class="project-status active">Active</span>
+      <span class="project-status active"><span data-lang="en">Active</span><span data-lang="es">Activo</span></span>
     </div>
-    <div class="project-row">
+    <div class="project-row" data-morse="–·– · · / · / –– · / ·––">
       <span class="project-num">004</span>
       <div class="project-info">
         <h3>WEB3 INFRASTRUCTURE</h3>
-        <p>Token systems, blockchain architecture, decentralized protocol design</p>
+        <p data-lang-block="en">Token systems, blockchain architecture, protocol design</p>
+        <p data-lang-block="es">Sistemas de tokens, arquitectura blockchain, diseño de protocolos</p>
       </div>
-      <span class="project-status">Building</span>
+      <span class="project-status"><span data-lang="en">Building</span><span data-lang="es">Construyendo</span></span>
     </div>
-    <div class="project-row">
+    <div class="project-row" data-morse="·–· / · / – / / · / – / ·––">
       <span class="project-num">005</span>
       <div class="project-info">
         <h3>PRIVATE NETWORK</h3>
-        <p>Sovereign network infrastructure — encrypted, autonomous, owned</p>
+        <p data-lang-block="en">Sovereign infrastructure — encrypted, autonomous, owned</p>
+        <p data-lang-block="es">Infraestructura soberana — cifrada, autónoma, propia</p>
       </div>
-      <span class="project-status">Building</span>
+      <span class="project-status"><span data-lang="en">Building</span><span data-lang="es">Construyendo</span></span>
     </div>
   </div>
 </section>
@@ -817,32 +575,31 @@
 <section>
   <div id="signal">
     <div class="signal-left reveal">
-      <div class="section-label">03 — Señal</div>
-      <h2>LET'S<br>BUILD.</h2>
-      <p>
-        If you're building something real — systems, infrastructure, new paradigms — I want to hear about it. No pitches. No small talk. Just people who build.
-      </p>
-      <br>
-      <p style="font-size:13px; color: rgba(255,255,255,0.35);">
-        Si construyes algo real, escríbeme. La colaboración no tiene geografía.
-      </p>
+      <div class="section-label">
+        <span data-lang="en">03 — Signal</span>
+        <span data-lang="es">03 — Señal</span>
+      </div>
+      <h2 data-lang-block="en">LET'S<br>BUILD.</h2>
+      <h2 data-lang-block="es">A<br>CONSTRUIR.</h2>
+      <p data-lang-block="en">Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.</p>
+      <p data-lang-block="es">¿Construyendo algo real — sistemas, infraestructura, nuevos paradigmas? Quiero escucharte. Sin presentaciones. Sin relleno. Solo constructores.</p>
     </div>
-    <div class="signal-right reveal">
+    <div class="signal-right reveal" style="padding-top:8px;">
       <a class="contact-line" href="mailto:jesus@jesustorres.dev">
         <span class="contact-label">Email</span>
-        <span class="contact-value">torresdevmx@gmail.com</span>
+        <span class="contact-value">jesus@jesustorres.dev</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
         <span class="contact-label">GitHub</span>
-        <span class="contact-value">github.com/torresdevmx</span>
+        <span class="contact-value">github.com/jesustorres</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
         <span class="contact-label">Telegram</span>
-        <span class="contact-value">@torresdevmx</span>
+        <span class="contact-value">@jesustorres</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
-        <span class="contact-label">LinkedIn</span>
-        <span class="contact-value">linkedin.com/in/torresdevmx</span>
+        <span class="contact-label">Bybit</span>
+        <span class="contact-value" style="font-size:13px;color:var(--muted);">// trader in the field</span>
       </a>
     </div>
   </div>
@@ -850,29 +607,114 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 — Jesús Torres</p>
-  <p>Durango, México — Building systems that matter</p>
-  <p>jesustorres.dev</p>
+  <p>© 2026 — JT</p>
+  <!-- EASTER EGG 5: invisible footer message -->
+  <p class="footer-egg">// compiled at 24.0277°N · all rights reserved to the architect · run ./jesustorres --init</p>
+  <p style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.08);letter-spacing:0.15em;">
+    <span data-lang="en">run ./jesustorres --init</span>
+    <span data-lang="es">ejecutar ./jesustorres --inicio</span>
+  </p>
 </footer>
 
 <script>
-  // Nav scroll
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
-  });
+// ── LANG ──
+function setLang(lang) {
+  document.body.classList.remove('en','es');
+  document.body.classList.add(lang);
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.getElementById('btn-es').classList.toggle('active', lang==='es');
+}
 
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+// ── NAV SCROLL ──
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 60));
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting) {
+      setTimeout(()=>e.target.classList.add('visible'), i*80);
+      observer.unobserve(e.target);
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── PARALLAX GLOW ──
+document.addEventListener('mousemove', (e) => {
+  const glow = document.getElementById('glow');
+  const x = (e.clientX/innerWidth - 0.5)*60;
+  const y = (e.clientY/innerHeight - 0.5)*60;
+  glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+});
+
+// ── TERMINAL CONTENT ──
+const lines = {
+  en: [
+    ['cmd','> whoami'],
+    ['out','  jesustorres — builder, trader, architect, 38'],
+    ['cmd','> ls /systems'],
+    ['out','  trading_bot/  web3/  linux_os/  domotica/  cybersec/  self/'],
+    ['cmd','> cat /etc/philosophy'],
+    ['out','  "Systems don\'t fail. Architects do."'],
+    ['cmd','> ping world --count 1'],
+    ['out','  64 bytes from world: icmp_seq=38 ttl=64 time=0.38ms'],
+    ['out','  // home: confirmed. status: building.'],
+    ['cmd','> _'],
+  ],
+  es: [
+    ['cmd','> whoami'],
+    ['out','  jesustorres — constructor, trader, arquitecto, 38'],
+    ['cmd','> ls /sistemas'],
+    ['out','  bot_trading/  web3/  linux_os/  domotica/  cibersec/  self/'],
+    ['cmd','> cat /etc/filosofia'],
+    ['out','  "Los sistemas no fallan. Los arquitectos sí."'],
+    ['cmd','> ping mundo --count 1'],
+    ['out','  64 bytes desde mundo: icmp_seq=38 ttl=64 time=0.38ms'],
+    ['out','  // casa: confirmada. estado: construyendo.'],
+    ['cmd','> _'],
+  ]
+};
+
+function openTerminal() {
+  const overlay = document.getElementById('terminal-overlay');
+  const content = document.getElementById('term-content');
+  const header  = document.getElementById('term-header');
+  const lang = document.body.classList.contains('es') ? 'es' : 'en';
+  header.textContent = lang==='es'
+    ? '// acceso no autorizado detectado — mentira. bienvenido.'
+    : '// unauthorized access detected — just kidding. welcome.';
+  content.innerHTML = '';
+  overlay.classList.add('open');
+  lines[lang].forEach(([type, text], i) => {
+    const el = document.createElement('div');
+    el.className = 'term-line';
+    el.style.animationDelay = (i * 110) + 'ms';
+    el.style.color = type==='cmd' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.45)';
+    el.textContent = text;
+    content.appendChild(el);
+  });
+}
+
+function closeTerminal() {
+  document.getElementById('terminal-overlay').classList.remove('open');
+}
+
+// ── EASTER EGG: Konami Code ──
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let ki = 0;
+document.addEventListener('keydown', e => {
+  ki = e.key===konami[ki] ? ki+1 : 0;
+  if(ki===konami.length){ ki=0; openTerminal(); }
+});
+
+// ── EASTER EGG: click name 5x ──
+let nc = 0;
+document.getElementById('hero-name').addEventListener('click', () => {
+  if(++nc>=5){ nc=0; openTerminal(); }
+});
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeTerminal(); });
 </script>
 </body>
 </html>
