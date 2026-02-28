@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jesús Torres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --dim: rgba(255,255,255,0.08);
+    --dim2: rgba(255,255,255,0.04);
+    --line: rgba(255,255,255,0.12);
+    --muted: rgba(255,255,255,0.35);
+    --mono: 'Space Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--body);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s;
+  }
+  nav.scrolled {
+    border-color: var(--line);
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Grid lines background */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  /* Radial glow */
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 120px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: var(--display);
+    font-size: clamp(72px, 12vw, 180px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-name span {
+    display: block;
+  }
+  .hero-name .last {
+    color: var(--muted);
+  }
+
+  .hero-statement {
+    margin-top: 48px;
+    max-width: 520px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-statement p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+  }
+  .hero-statement .es {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .hero-coords {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+  }
+
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .scroll-indicator span {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 120px 48px;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* STATEMENT SECTION */
+  #statement {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .statement-left h2 {
+    font-family: var(--display);
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .statement-right p {
+    font-size: 16px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 24px;
+  }
+  .statement-right .highlight {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* SYSTEMS */
+  #systems {
+    overflow: hidden;
+  }
+
+  .systems-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .system-cell {
+    background: var(--black);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .system-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--dim2);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .system-cell:hover::before { opacity: 1; }
+
+  .system-number {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  .system-title {
+    font-family: var(--display);
+    font-size: 36px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .system-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .system-tag {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+
+  /* PHILOSOPHY */
+  #philosophy {
+    text-align: center;
+    padding: 160px 48px;
+  }
+
+  .philosophy-quote {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 72px);
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    max-width: 900px;
+    margin: 0 auto 48px;
+  }
+
+  .philosophy-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* ORBIT / PROJECTS */
+  #orbit .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+    cursor: default;
+    position: relative;
+  }
+  .project-row::after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    font-size: 18px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .project-row:hover::after {
+    opacity: 0.4;
+    transform: translateX(0);
+  }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.2em;
+  }
+
+  .project-info h3 {
+    font-family: var(--display);
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .project-info p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .project-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .project-status.active {
+    border-color: rgba(255,255,255,0.3);
+    color: var(--white);
+  }
+
+  /* LANGUAGES */
+  .lang-bar {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .lang-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .lang-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .lang-level {
+    display: flex;
+    gap: 4px;
+  }
+  .lang-dot {
+    width: 20px;
+    height: 2px;
+    background: var(--line);
+  }
+  .lang-dot.filled {
+    background: var(--white);
+  }
+
+  /* SIGNAL / CONTACT */
+  #signal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .signal-left h2 {
+    font-family: var(--display);
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+  }
+  .signal-left p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    max-width: 380px;
+  }
+
+  .signal-right {
+    padding-top: 8px;
+  }
+
+  .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .contact-line:hover { opacity: 0.6; }
+
+  .contact-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 80px;
+    flex-shrink: 0;
+  }
+  .contact-value {
+    font-family: var(--body);
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    padding: 32px 0;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track span {
+    font-family: var(--display);
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 0 48px;
+  }
+  .marquee-track span.sep {
+    color: rgba(255,255,255,0.15);
+    padding: 0;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 0 24px 40px; }
+    section { padding: 80px 24px; }
+    #statement, #signal { grid-template-columns: 1fr; gap: 48px; }
+    .systems-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <span class="nav-logo">JT — jesustorres.dev</span>
+  <ul class="nav-links">
+    <li><a href="#systems">Systems</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#orbit">Orbit</a></li>
+    <li><a href="#signal">Signal</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Builder · Trader · Architect · 38° N</p>
+
+    <h1 class="hero-name">
+      <span class="first">JESÚS</span>
+      <span class="last">TORRES</span>
+    </h1>
+
+    <div class="hero-statement">
+      <p>I build systems. Everything else is consequence.</p>
+      <p class="es">Construyo sistemas. El resto es consecuencia.</p>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-coords">
+      <div>24.0277° N, 104.6532° W</div>
+      <div>Durango, México</div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Trading Bots</span><span class="sep"> / </span>
+    <span>Blockchain</span><span class="sep"> / </span>
+    <span>Web3</span><span class="sep"> / </span>
+    <span>Linux OS</span><span class="sep"> / </span>
+    <span>Domótica</span><span class="sep"> / </span>
+    <span>Redes Privadas</span><span class="sep"> / </span>
+    <span>Self Mastery</span><span class="sep"> / </span>
+    <span>Ciberseguridad</span><span class="sep"> / </span>
+    <span>Quantum Tech</span><span class="sep"> / </span>
+    <span>Trading Bots</span><span class="sep"> / </span>
+    <span>Blockchain</span><span class="sep"> / </span>
+    <span>Web3</span><span class="sep"> / </span>
+    <span>Linux OS</span><span class="sep"> / </span>
+    <span>Domótica</span><span class="sep"> / </span>
+    <span>Redes Privadas</span><span class="sep"> / </span>
+    <span>Self Mastery</span><span class="sep"> / </span>
+    <span>Ciberseguridad</span><span class="sep"> / </span>
+    <span>Quantum Tech</span><span class="sep"> / </span>
+  </div>
+</div>
+
+<!-- STATEMENT -->
+<section>
+  <div id="statement">
+    <div class="statement-left reveal">
+      <div class="section-label">00 — Manifiesto</div>
+      <h2>THE WORLD<br>IS HOME</h2>
+    </div>
+    <div class="statement-right reveal">
+      <p>
+        I see the world as <span class="highlight">my home</span> — a beautiful place to improve, to help, to experience deeply and explore without limits. Not a battlefield. Not a race. A living system I'm part of and choose to make better.
+      </p>
+      <p>
+        Veo el mundo como <span class="highlight">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar. Eso es lo que construye lo que construyo.
+      </p>
+
+      <!-- Languages -->
+      <div class="lang-bar">
+        <div class="lang-item">
+          <span class="lang-label">Español</span>
+          <div class="lang-level">
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+          </div>
+        </div>
+        <div class="lang-item">
+          <span class="lang-label">English</span>
+          <div class="lang-level">
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+          </div>
+        </div>
+        <div class="lang-item">
+          <span class="lang-label">Deutsch</span>
+          <div class="lang-level">
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+          </div>
+        </div>
+        <div class="lang-item">
+          <span class="lang-label">中文</span>
+          <div class="lang-level">
+            <div class="lang-dot filled"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+            <div class="lang-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEMS -->
+<section id="systems">
+  <div class="section-label reveal">01 — Sistemas</div>
+  <div class="systems-grid">
+    <div class="system-cell reveal">
+      <span class="system-number">01.01</span>
+      <h3 class="system-title">TRADING<br>& BOTS</h3>
+      <p class="system-desc">Active trader on Bybit. Building AI-powered bots that operate autonomously in financial markets. Turning market chaos into executable logic.</p>
+      <span class="system-tag">Finanzas</span>
+    </div>
+    <div class="system-cell reveal">
+      <span class="system-number">01.02</span>
+      <h3 class="system-title">WEB3<br>BLOCKCHAIN</h3>
+      <p class="system-desc">Tokens, smart contracts, decentralized systems. Building on the infrastructure of the next financial paradigm before it becomes mainstream.</p>
+      <span class="system-tag">Web3</span>
+    </div>
+    <div class="system-cell reveal">
+      <span class="system-number">01.03</span>
+      <h3 class="system-title">LINUX<br>OS DEV</h3>
+      <p class="system-desc">Custom Linux operating system for multiple devices. Private networks, security-first architecture. Own your stack, own your freedom.</p>
+      <span class="system-tag">Sistemas</span>
+    </div>
+    <div class="system-cell reveal">
+      <span class="system-number">01.04</span>
+      <h3 class="system-title">DOMÓTICA<br>& IOT</h3>
+      <p class="system-desc">Electronic systems that make physical spaces intelligent. From sensors to automation — environments that respond, adapt, and protect.</p>
+      <span class="system-tag">Electrónica</span>
+    </div>
+    <div class="system-cell reveal">
+      <span class="system-number">01.05</span>
+      <h3 class="system-title">CYBER<br>SECURITY</h3>
+      <p class="system-desc">Security is not a feature. It's a foundation. Building and contributing to systems where privacy and integrity are non-negotiable defaults.</p>
+      <span class="system-tag">Seguridad</span>
+    </div>
+    <div class="system-cell reveal">
+      <span class="system-number">01.06</span>
+      <h3 class="system-title">SELF<br>MASTERY</h3>
+      <p class="system-desc">Casi 2 años de desarrollo personal. Saltos cuánticos, despertares reales. El sistema más complejo que construyo soy yo mismo.</p>
+      <span class="system-tag">Humano</span>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <p class="philosophy-quote reveal">
+    "SYSTEMS DON'T FAIL.<br>ARCHITECTS DO."
+  </p>
+  <p class="philosophy-sub reveal">
+    Every problem is an architecture problem.<br>
+    Every solution is a system waiting to be designed.
+  </p>
+</section>
+
+<!-- ORBIT -->
+<section id="orbit" style="padding-top: 80px;">
+  <div class="section-label reveal">02 — Órbita Activa</div>
+  <div class="projects-list reveal">
+    <div class="project-row">
+      <span class="project-num">001</span>
+      <div class="project-info">
+        <h3>TRADING BOT AI</h3>
+        <p>Autonomous trading system with machine learning signals — Bybit integration</p>
+      </div>
+      <span class="project-status active">Active</span>
+    </div>
+    <div class="project-row">
+      <span class="project-num">002</span>
+      <div class="project-info">
+        <h3>CYBERSECURITY FIRM</h3>
+        <p>Landing page live — seed planted. Team forming. Returning in 2 years.</p>
+      </div>
+      <span class="project-status">Seeded</span>
+    </div>
+    <div class="project-row">
+      <span class="project-num">003</span>
+      <div class="project-info">
+        <h3>CUSTOM LINUX OS</h3>
+        <p>Multi-device operating system — private network ready, security native</p>
+      </div>
+      <span class="project-status active">Active</span>
+    </div>
+    <div class="project-row">
+      <span class="project-num">004</span>
+      <div class="project-info">
+        <h3>WEB3 INFRASTRUCTURE</h3>
+        <p>Token systems, blockchain architecture, decentralized protocol design</p>
+      </div>
+      <span class="project-status">Building</span>
+    </div>
+    <div class="project-row">
+      <span class="project-num">005</span>
+      <div class="project-info">
+        <h3>PRIVATE NETWORK</h3>
+        <p>Sovereign network infrastructure — encrypted, autonomous, owned</p>
+      </div>
+      <span class="project-status">Building</span>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNAL -->
+<section>
+  <div id="signal">
+    <div class="signal-left reveal">
+      <div class="section-label">03 — Señal</div>
+      <h2>LET'S<br>BUILD.</h2>
+      <p>
+        If you're building something real — systems, infrastructure, new paradigms — I want to hear about it. No pitches. No small talk. Just people who build.
+      </p>
+      <br>
+      <p style="font-size:13px; color: rgba(255,255,255,0.35);">
+        Si construyes algo real, escríbeme. La colaboración no tiene geografía.
+      </p>
+    </div>
+    <div class="signal-right reveal">
+      <a class="contact-line" href="mailto:jesus@jesustorres.dev">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">jesus@jesustorres.dev</span>
+      </a>
+      <a class="contact-line" href="#" target="_blank">
+        <span class="contact-label">GitHub</span>
+        <span class="contact-value">github.com/jesustorres</span>
+      </a>
+      <a class="contact-line" href="#" target="_blank">
+        <span class="contact-label">Telegram</span>
+        <span class="contact-value">@jesustorres</span>
+      </a>
+      <a class="contact-line" href="#" target="_blank">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value">linkedin.com/in/jesustorres</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 — Jesús Torres</p>
+  <p>Durango, México — Building systems that matter</p>
+  <p>jesustorres.dev</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
