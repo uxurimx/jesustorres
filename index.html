@@ -3,361 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="architect" content="jesustorres — systems don't fail.">
+<meta name="status" content="building">
+<meta name="location" content="24.0277N 104.6532W">
 <title>JT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000;
+  --white: #FFF;
+  --line: rgba(255,255,255,0.12);
+  --muted: rgba(255,255,255,0.35);
+  --mono: 'Space Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'DM Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--body);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.7;
+}
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); }
 
-  :root {
-    --black: #000000;
-    --white: #FFFFFF;
-    --dim2: rgba(255,255,255,0.04);
-    --line: rgba(255,255,255,0.12);
-    --muted: rgba(255,255,255,0.35);
-    --mono: 'Space Mono', monospace;
-    --display: 'Bebas Neue', sans-serif;
-    --body: 'DM Sans', sans-serif;
-  }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 48px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s, background 0.4s;
+}
+nav.scrolled { border-color: var(--line); background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); }
+.nav-logo { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; cursor: default; }
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
 
-  html { scroll-behavior: smooth; }
+/* lang toggle */
+.lang-toggle { display: flex; align-items: center; border: 1px solid var(--line); }
+.lang-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; padding: 5px 13px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: background 0.2s, color 0.2s; text-transform: uppercase; }
+.lang-btn.active { background: var(--white); color: var(--black); }
+.lang-sep { width: 1px; height: 26px; background: var(--line); }
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: var(--body);
-    font-weight: 300;
-    overflow-x: hidden;
-    cursor: crosshair;
-  }
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-rows: 1fr auto;
+  padding: 0 48px 48px;
+  position: relative; overflow: hidden;
+}
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.035) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none; transition: transform 0.5s ease;
+}
+.hero-content { display: flex; flex-direction: column; justify-content: center; padding-top: 120px; position: relative; z-index: 2; }
+.hero-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.4em; color: var(--muted); text-transform: uppercase; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+.hero-name {
+  font-family: var(--display); font-size: clamp(72px, 12vw, 180px);
+  line-height: 0.9; letter-spacing: 0.02em; position: relative;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  cursor: default; user-select: none;
+}
+.hero-name span { display: block; }
+.hero-name .last { color: var(--muted); }
+.hero-statement { margin-top: 48px; max-width: 520px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+.hero-statement p { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.7); font-weight: 300; }
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  position: relative; z-index: 2; opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+}
+.hero-coords { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.15em; line-height: 1.9; cursor: default; }
+.coord-secret { font-size: 9px; color: rgba(255,255,255,0.04); transition: color 0.6s; margin-top: 2px; }
+.hero-coords:hover .coord-secret { color: rgba(255,255,255,0.25); }
+.scroll-ind { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.scroll-ind span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; writing-mode: vertical-rl; }
+.scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3)); animation: pulse 2s ease-in-out infinite; }
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9999; opacity: 0.6;
-  }
+/* ── SECTIONS ── */
+section { padding: 120px 48px; border-top: 1px solid var(--line); }
+.sec-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); margin-bottom: 64px; display: flex; align-items: center; gap: 16px; }
+.sec-label::after { content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--line); }
 
-  ::-webkit-scrollbar { width: 2px; }
-  ::-webkit-scrollbar-track { background: #000; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); }
+/* ── MARQUEE ── */
+.marquee-wrap { padding: 30px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.marquee-track { display: flex; animation: marquee 24s linear infinite; white-space: nowrap; }
+.marquee-track span { font-family: var(--display); font-size: 14px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; padding: 0 44px; }
+.marquee-track .sep { color: rgba(255,255,255,0.12); padding: 0; }
 
-  /* ── LANG SYSTEM ── */
-  [data-lang] { display: none; }
-  body.en [data-lang="en"] { display: initial; }
-  body.es [data-lang="es"] { display: initial; }
-  [data-lang-block] { display: none; }
-  body.en [data-lang-block="en"] { display: block; }
-  body.es [data-lang-block="es"] { display: block; }
+/* ── STATEMENT ── */
+.statement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.stmt-title { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; }
+.stmt-body { font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
+.stmt-body .hl { color: var(--white); font-weight: 500; }
+.lang-bar { display: flex; gap: 36px; margin-top: 40px; flex-wrap: wrap; }
+.lang-item { display: flex; flex-direction: column; gap: 8px; }
+.lang-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+.lang-dots { display: flex; gap: 4px; }
+.dot { width: 20px; height: 2px; background: var(--line); }
+.dot.on { background: var(--white); }
 
-  .lang-toggle {
-    display: flex; align-items: center;
-    border: 1px solid var(--line); overflow: hidden;
-  }
-  .lang-btn {
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
-    padding: 6px 14px; background: transparent; border: none;
-    color: var(--muted); cursor: pointer;
-    transition: background 0.2s, color 0.2s; text-transform: uppercase;
-  }
-  .lang-btn.active { background: var(--white); color: var(--black); }
-  .lang-sep { width: 1px; height: 28px; background: var(--line); }
+/* ── SYSTEMS ── */
+.systems-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.sys-cell {
+  background: var(--black); padding: 48px 40px;
+  position: relative; overflow: hidden; cursor: default;
+  transition: background 0.3s;
+}
+.sys-cell::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.03); opacity: 0; transition: opacity 0.3s; }
+.sys-cell:hover::before { opacity: 1; }
+.sys-cell::after { content: attr(data-bin); position: absolute; bottom: 14px; left: 40px; font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.03); letter-spacing: 0.05em; transition: color 0.5s; pointer-events: none; }
+.sys-cell:hover::after { color: rgba(255,255,255,0.2); }
+.sys-num { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 32px; display: block; }
+.sys-title { font-family: var(--display); font-size: 36px; letter-spacing: 0.05em; line-height: 1; margin-bottom: 16px; }
+.sys-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
+.sys-tag { position: absolute; top: 22px; right: 22px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: rgba(255,255,255,0.12); text-transform: uppercase; }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 24px 48px;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s;
-  }
-  nav.scrolled {
-    border-color: var(--line);
-    background: rgba(0,0,0,0.88);
-    backdrop-filter: blur(12px);
-  }
-  .nav-logo {
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.2em; color: var(--muted);
-    text-transform: uppercase; cursor: default;
-  }
-  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
-  .nav-links a {
-    font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
+/* ── PHILOSOPHY ── */
+.phil-wrap { text-align: center; padding: 160px 48px; position: relative; border-top: 1px solid var(--line); }
+.phil-wrap::after { content: '// el sistema más difícil de compilar eres tú mismo'; position: absolute; bottom: 28px; right: 48px; font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.03); letter-spacing: 0.15em; transition: color 0.6s; pointer-events: none; }
+.phil-wrap:hover::after { color: rgba(255,255,255,0.22); }
+.phil-quote { font-family: var(--display); font-size: clamp(32px, 5vw, 72px); letter-spacing: 0.05em; line-height: 1.2; max-width: 900px; margin: 0 auto 48px; }
+.phil-sub { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.18em; max-width: 520px; margin: 0 auto; line-height: 1.9; }
 
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: grid; grid-template-rows: 1fr auto;
-    padding: 0 48px 48px;
-    position: relative; overflow: hidden;
-  }
-  .grid-bg {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 80px 80px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  }
-  .hero-glow {
-    position: absolute; width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.035) 0%, transparent 70%);
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    pointer-events: none; transition: transform 0.6s ease;
-  }
-  .hero-content {
-    display: flex; flex-direction: column; justify-content: center;
-    padding-top: 120px; position: relative; z-index: 2;
-  }
-  .hero-eyebrow {
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.4em;
-    color: var(--muted); text-transform: uppercase; margin-bottom: 32px;
-    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
-  }
-  .hero-name {
-    font-family: var(--display);
-    font-size: clamp(72px, 12vw, 180px);
-    line-height: 0.9; letter-spacing: 0.02em;
-    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
-    cursor: default; user-select: none;
-  }
-  .hero-name span { display: block; }
-  .hero-name .last { color: var(--muted); }
-  .hero-statement {
-    margin-top: 48px; max-width: 520px;
-    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
-  }
-  .hero-statement p { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.7); font-weight: 300; }
-  .hero-bottom {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    position: relative; z-index: 2;
-    opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
-  }
+/* ── ORBIT ── */
+.proj-list { display: flex; flex-direction: column; }
+.proj-row {
+  display: grid; grid-template-columns: 72px 1fr auto;
+  align-items: center; gap: 40px;
+  padding: 30px 0; border-bottom: 1px solid var(--line);
+  cursor: default; position: relative; transition: padding-left 0.25s;
+}
+.proj-row:hover { padding-left: 8px; }
+.proj-row::after { content: attr(data-morse); position: absolute; right: 140px; font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.03); letter-spacing: 0.1em; transition: color 0.5s; pointer-events: none; }
+.proj-row:hover::after { color: rgba(255,255,255,0.18); }
+.proj-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 0.2em; }
+.proj-info h3 { font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; margin-bottom: 4px; }
+.proj-info p { font-size: 13px; color: var(--muted); }
+.proj-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--line); color: var(--muted); flex-shrink: 0; }
+.proj-status.on { border-color: rgba(255,255,255,0.35); color: var(--white); }
 
-  /* EASTER EGG 1: coords hover reveal */
-  .hero-coords {
-    font-family: var(--mono); font-size: 10px;
-    color: var(--muted); letter-spacing: 0.15em; line-height: 1.8;
-    cursor: default;
-  }
-  .coord-extra {
-    font-size: 9px; color: rgba(255,255,255,0.05);
-    letter-spacing: 0.12em; margin-top: 4px;
-    transition: color 0.6s;
-  }
-  .hero-coords:hover .coord-extra { color: rgba(255,255,255,0.22); }
+/* ── SIGNAL ── */
+.signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.sig-title { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; margin-bottom: 32px; }
+.sig-body { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.55); max-width: 380px; }
+.contact-line { display: flex; align-items: center; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; transition: opacity 0.2s; }
+.contact-line:hover { opacity: 0.5; }
+.c-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); width: 76px; flex-shrink: 0; }
+.c-value { font-size: 16px; font-weight: 400; }
 
-  .scroll-indicator { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .scroll-indicator span {
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em;
-    color: var(--muted); text-transform: uppercase; writing-mode: vertical-rl;
-  }
-  .scroll-line {
-    width: 1px; height: 60px;
-    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3));
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
+/* ── FOOTER ── */
+footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
+.foot-p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.18); }
+.foot-egg { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.025); letter-spacing: 0.18em; white-space: nowrap; cursor: default; user-select: none; transition: color 0.7s; }
+.foot-egg:hover { color: rgba(255,255,255,0.28); }
 
-  /* ── SECTIONS ── */
-  section { padding: 120px 48px; border-top: 1px solid var(--line); }
-  .section-label {
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.4em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 64px;
-    display: flex; align-items: center; gap: 16px;
-  }
-  .section-label::after {
-    content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--line);
-  }
+/* ── TERMINAL ── */
+#terminal {
+  display: none; position: fixed; inset: 0; z-index: 8000;
+  background: rgba(0,0,0,0.96); backdrop-filter: blur(4px);
+  padding: 80px 48px; flex-direction: column; justify-content: center;
+}
+#terminal.open { display: flex; }
+.term-hdr { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.22); letter-spacing: 0.3em; margin-bottom: 40px; }
+.term-line { font-family: var(--mono); font-size: 14px; letter-spacing: 0.05em; line-height: 2.2; opacity: 0; animation: fadeIn 0.05s forwards; }
+.term-cmd { color: rgba(255,255,255,1); }
+.term-out { color: rgba(255,255,255,0.42); }
+.term-close { position: absolute; top: 32px; right: 48px; font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; cursor: pointer; background: none; border: 1px solid var(--line); padding: 8px 16px; transition: color 0.2s; }
+.term-close:hover { color: var(--white); }
 
-  /* ── STATEMENT ── */
-  #statement { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-  .statement-left h2 {
-    font-family: var(--display); font-size: clamp(48px, 6vw, 96px);
-    line-height: 1; letter-spacing: 0.02em;
-  }
-  .statement-right p { font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
-  .statement-right .highlight { color: var(--white); font-weight: 500; }
-  .lang-bar { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
-  .lang-item { display: flex; flex-direction: column; gap: 8px; }
-  .lang-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
-  .lang-level { display: flex; gap: 4px; }
-  .lang-dot { width: 20px; height: 2px; background: var(--line); }
-  .lang-dot.filled { background: var(--white); }
+/* ── MATRIX ── */
+#matrix { position: fixed; inset: 0; z-index: 7000; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+#matrix.on { opacity: 1; pointer-events: all; }
 
-  /* ── SYSTEMS ── */
-  .systems-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--line); border: 1px solid var(--line);
-  }
-  .system-cell {
-    background: var(--black); padding: 48px 40px;
-    position: relative; overflow: hidden; transition: background 0.3s; cursor: default;
-  }
-  .system-cell::before {
-    content: ''; position: absolute; inset: 0;
-    background: var(--dim2); opacity: 0; transition: opacity 0.3s;
-  }
-  .system-cell:hover::before { opacity: 1; }
-  /* EASTER EGG 2: binary code appears on hover */
-  .system-cell::after {
-    content: attr(data-binary);
-    position: absolute; bottom: 14px; left: 40px;
-    font-family: var(--mono); font-size: 8px;
-    color: rgba(255,255,255,0.04); letter-spacing: 0.05em;
-    transition: color 0.5s; pointer-events: none;
-  }
-  .system-cell:hover::after { color: rgba(255,255,255,0.2); }
-  .system-number { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 32px; display: block; }
-  .system-title { font-family: var(--display); font-size: 36px; letter-spacing: 0.05em; line-height: 1; margin-bottom: 16px; }
-  .system-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
-  .system-tag { position: absolute; top: 24px; right: 24px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: rgba(255,255,255,0.12); text-transform: uppercase; }
+/* ── GLITCH ── */
+@keyframes glitch1 { 0%{clip-path:inset(40% 0 61% 0);transform:translate(-4px,0)} 20%{clip-path:inset(92% 0 1% 0);transform:translate(4px,0)} 40%{clip-path:inset(43% 0 1% 0);transform:translate(0,0)} 60%{clip-path:inset(25% 0 58% 0);transform:translate(3px,0)} 80%{clip-path:inset(54% 0 7% 0);transform:translate(-3px,0)} 100%{clip-path:inset(58% 0 43% 0);transform:translate(0,0)} }
+@keyframes glitch2 { 0%{clip-path:inset(50% 0 30% 0);transform:translate(4px,0)} 20%{clip-path:inset(10% 0 85% 0);transform:translate(-4px,0)} 40%{clip-path:inset(80% 0 5% 0);transform:translate(0,0)} 60%{clip-path:inset(15% 0 60% 0);transform:translate(-3px,0)} 80%{clip-path:inset(70% 0 10% 0);transform:translate(3px,0)} 100%{clip-path:inset(40% 0 50% 0);transform:translate(0,0)} }
 
-  /* ── PHILOSOPHY ── */
-  #philosophy { text-align: center; padding: 160px 48px; position: relative; }
-  /* EASTER EGG 3: comment appears on hover */
-  #philosophy::after {
-    content: '// el sistema más difícil de compilar eres tú mismo';
-    position: absolute; bottom: 28px; right: 48px;
-    font-family: var(--mono); font-size: 9px;
-    color: rgba(255,255,255,0.03); letter-spacing: 0.15em;
-    transition: color 0.6s; pointer-events: none;
-  }
-  #philosophy:hover::after { color: rgba(255,255,255,0.22); }
-  .philosophy-quote {
-    font-family: var(--display); font-size: clamp(32px, 5vw, 72px);
-    letter-spacing: 0.05em; line-height: 1.2; max-width: 900px; margin: 0 auto 48px;
-  }
-  .philosophy-sub {
-    font-family: var(--mono); font-size: 12px; color: var(--muted);
-    letter-spacing: 0.2em; max-width: 500px; margin: 0 auto; line-height: 1.8;
-  }
+.hero-name.glitch::before,
+.hero-name.glitch::after {
+  content: attr(data-text);
+  position: absolute; top: 0; left: 0; width: 100%;
+  font-family: var(--display); font-size: clamp(72px,12vw,180px); line-height: 0.9; letter-spacing: 0.02em;
+}
+.hero-name.glitch::before { color: rgba(255,50,50,0.85); animation: glitch1 0.3s steps(1) infinite; }
+.hero-name.glitch::after  { color: rgba(50,220,255,0.85); animation: glitch2 0.3s steps(1) infinite; }
 
-  /* ── ORBIT ── */
-  .projects-list { display: flex; flex-direction: column; }
-  .project-row {
-    display: grid; grid-template-columns: 80px 1fr auto;
-    align-items: center; gap: 40px;
-    padding: 32px 0; border-bottom: 1px solid var(--line);
-    cursor: default; position: relative; transition: padding-left 0.25s;
-  }
-  .project-row:hover { padding-left: 8px; }
-  /* EASTER EGG 4: morse on hover */
-  .project-row::after {
-    content: attr(data-morse);
-    position: absolute; right: 140px;
-    font-family: var(--mono); font-size: 8px;
-    color: rgba(255,255,255,0.04); letter-spacing: 0.1em;
-    transition: color 0.5s; pointer-events: none;
-  }
-  .project-row:hover::after { color: rgba(255,255,255,0.18); }
-  .project-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.2em; }
-  .project-info h3 { font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .project-info p { font-size: 13px; color: var(--muted); }
-  .project-status {
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
-    text-transform: uppercase; padding: 6px 14px;
-    border: 1px solid var(--line); color: var(--muted); flex-shrink: 0;
-  }
-  .project-status.active { border-color: rgba(255,255,255,0.3); color: var(--white); }
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.in { opacity: 1; transform: none; }
 
-  /* ── SIGNAL ── */
-  #signal { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-  .signal-left h2 { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; margin-bottom: 32px; }
-  .signal-left p { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.55); max-width: 380px; }
-  .contact-line {
-    display: flex; align-items: center; gap: 24px;
-    padding: 28px 0; border-bottom: 1px solid var(--line);
-    text-decoration: none; color: inherit;
-    transition: opacity 0.2s;
-  }
-  .contact-line:hover { opacity: 0.5; }
-  .contact-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); width: 80px; flex-shrink: 0; }
-  .contact-value { font-size: 16px; font-weight: 400; }
+/* ── KEYFRAMES ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { to{opacity:1} }
+@keyframes pulse  { 0%,100%{opacity:0.3} 50%{opacity:1} }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* ── MARQUEE ── */
-  .marquee-section { padding: 32px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .marquee-track { display: flex; animation: marquee 24s linear infinite; white-space: nowrap; }
-  .marquee-track span { font-family: var(--display); font-size: 14px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; padding: 0 48px; }
-  .marquee-track span.sep { color: rgba(255,255,255,0.12); padding: 0; }
-
-  /* ── FOOTER ── */
-  footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
-  footer p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.2); }
-  /* EASTER EGG 5: footer invisible message */
-  .footer-egg {
-    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-    font-family: var(--mono); font-size: 8px;
-    color: rgba(255,255,255,0.03); letter-spacing: 0.18em;
-    white-space: nowrap; cursor: default; user-select: none;
-    transition: color 0.7s;
-  }
-  .footer-egg:hover { color: rgba(255,255,255,0.28); }
-
-  /* ── TERMINAL OVERLAY ── */
-  #terminal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.95); z-index: 9000;
-    padding: 80px 48px; backdrop-filter: blur(4px);
-  }
-  #terminal-overlay.open { display: flex; flex-direction: column; justify-content: center; }
-  .term-header { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 0.3em; margin-bottom: 40px; }
-  .term-line {
-    font-family: var(--mono); font-size: 14px; color: var(--white);
-    letter-spacing: 0.05em; line-height: 2.2; opacity: 0;
-    animation: fadeIn 0.05s forwards;
-  }
-  .term-line .prompt { color: rgba(255,255,255,0.28); margin-right: 12px; }
-  .term-close {
-    position: absolute; top: 32px; right: 48px;
-    font-family: var(--mono); font-size: 10px; color: var(--muted);
-    letter-spacing: 0.2em; cursor: pointer; background: none;
-    border: 1px solid var(--line); padding: 8px 16px; transition: color 0.2s;
-  }
-  .term-close:hover { color: var(--white); }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @keyframes fadeIn { to { opacity: 1; } }
-
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
-  .reveal.visible { opacity: 1; transform: none; }
-
-  @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
-    .nav-links { gap: 16px; }
-    #hero { padding: 0 24px 40px; }
-    section { padding: 80px 24px; }
-    #statement, #signal { grid-template-columns: 1fr; gap: 48px; }
-    .systems-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 12px; text-align: center; }
-    .project-row { grid-template-columns: 40px 1fr auto; gap: 12px; }
-  }
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:18px 20px;}
+  .nav-links{gap:14px;}
+  #hero,section{padding-left:24px;padding-right:24px;}
+  .statement-grid,.signal-grid{grid-template-columns:1fr;gap:48px;}
+  .systems-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:10px;text-align:center;}
+  .proj-row{grid-template-columns:40px 1fr auto;gap:12px;}
+}
 </style>
 </head>
-<body class="en">
+<body>
 
-<!-- TERMINAL -->
-<div id="terminal-overlay">
-  <button class="term-close" onclick="closeTerminal()">[ ESC ]</button>
-  <div class="term-header" id="term-header"></div>
-  <div id="term-content"></div>
+<canvas id="matrix"></canvas>
+
+<div id="terminal">
+  <button class="term-close" onclick="closeTerm()">[ ESC ]</button>
+  <div class="term-hdr" id="term-hdr"></div>
+  <div id="term-body"></div>
 </div>
 
 <!-- NAV -->
-<nav id="navbar">
+<nav id="nav">
   <span class="nav-logo" title="// node initialized">JT — ████████.dev</span>
   <ul class="nav-links">
-    <li><a href="#systems" data-lang="en">Systems</a><a href="#systems" data-lang="es">Sistemas</a></li>
-    <li><a href="#philosophy" data-lang="en">Philosophy</a><a href="#philosophy" data-lang="es">Filosofía</a></li>
-    <li><a href="#orbit" data-lang="en">Orbit</a><a href="#orbit" data-lang="es">Órbita</a></li>
+    <li><a href="#systems" id="nl-sys">Systems</a></li>
+    <li><a href="#philosophy" id="nl-phi">Philosophy</a></li>
+    <li><a href="#orbit" id="nl-orb">Orbit</a></li>
     <li><a href="#signal">Signal</a></li>
     <li>
       <div class="lang-toggle">
@@ -374,79 +265,70 @@
   <div class="grid-bg"></div>
   <div class="hero-glow" id="glow"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">
-      <span data-lang="en">Builder · Trader · Architect · Node_38</span>
-      <span data-lang="es">Constructor · Trader · Arquitecto · Nodo_38</span>
-    </p>
-    <h1 class="hero-name" id="hero-name">
+    <p class="hero-eyebrow" id="eyebrow">Builder · Trader · Architect · Node_38</p>
+    <h1 class="hero-name" id="hero-name" data-text="JESÚS TORRES">
       <span class="first">JESÚS</span>
       <span class="last">TORRES</span>
     </h1>
     <div class="hero-statement">
-      <p data-lang-block="en">I build systems. Everything else is consequence.</p>
-      <p data-lang-block="es">Construyo sistemas. El resto es consecuencia.</p>
+      <p id="hero-stmt">I build systems. Everything else is consequence.</p>
     </div>
   </div>
   <div class="hero-bottom">
-    <!-- EASTER EGG 1: hover coords -->
     <div class="hero-coords">
       <div>24.0277° N</div>
       <div>104.6532° W</div>
-      <div class="coord-extra">ALT 1889m · TZ UTC-6 · // sector: known</div>
+      <div class="coord-secret">ALT 1889m · TZ UTC−6 · // sector: known</div>
     </div>
-    <div class="scroll-indicator">
-      <span data-lang="en">Scroll</span>
-      <span data-lang="es">Bajar</span>
+    <div class="scroll-ind">
+      <span id="scroll-lbl">Scroll</span>
       <div class="scroll-line"></div>
     </div>
   </div>
 </section>
 
 <!-- MARQUEE -->
-<div class="marquee-section">
+<div class="marquee-wrap">
   <div class="marquee-track">
-    <span>Trading Bots</span><span class="sep"> / </span>
-    <span>Blockchain</span><span class="sep"> / </span>
-    <span>Web3</span><span class="sep"> / </span>
-    <span>Linux OS</span><span class="sep"> / </span>
-    <span>Domótica</span><span class="sep"> / </span>
-    <span>Redes Privadas</span><span class="sep"> / </span>
-    <span>Self Mastery</span><span class="sep"> / </span>
-    <span>Ciberseguridad</span><span class="sep"> / </span>
-    <span>Quantum Tech</span><span class="sep"> / </span>
-    <span>38 años</span><span class="sep"> / </span>
-    <span>Trading Bots</span><span class="sep"> / </span>
-    <span>Blockchain</span><span class="sep"> / </span>
-    <span>Web3</span><span class="sep"> / </span>
-    <span>Linux OS</span><span class="sep"> / </span>
-    <span>Domótica</span><span class="sep"> / </span>
-    <span>Redes Privadas</span><span class="sep"> / </span>
-    <span>Self Mastery</span><span class="sep"> / </span>
-    <span>Ciberseguridad</span><span class="sep"> / </span>
-    <span>Quantum Tech</span><span class="sep"> / </span>
-    <span>38 años</span><span class="sep"> / </span>
+    <span>Trading Bots</span><span class="sep">/</span>
+    <span>Blockchain</span><span class="sep">/</span>
+    <span>Web3</span><span class="sep">/</span>
+    <span>Linux OS</span><span class="sep">/</span>
+    <span>Domótica</span><span class="sep">/</span>
+    <span>Redes Privadas</span><span class="sep">/</span>
+    <span>Self Mastery</span><span class="sep">/</span>
+    <span>Ciberseguridad</span><span class="sep">/</span>
+    <span>Quantum Tech</span><span class="sep">/</span>
+    <span>38 años</span><span class="sep">/</span>
+    <span>Trading Bots</span><span class="sep">/</span>
+    <span>Blockchain</span><span class="sep">/</span>
+    <span>Web3</span><span class="sep">/</span>
+    <span>Linux OS</span><span class="sep">/</span>
+    <span>Domótica</span><span class="sep">/</span>
+    <span>Redes Privadas</span><span class="sep">/</span>
+    <span>Self Mastery</span><span class="sep">/</span>
+    <span>Ciberseguridad</span><span class="sep">/</span>
+    <span>Quantum Tech</span><span class="sep">/</span>
+    <span>38 años</span><span class="sep">/</span>
   </div>
 </div>
 
 <!-- STATEMENT -->
 <section>
-  <div id="statement">
-    <div class="statement-left reveal">
-      <div class="section-label">
-        <span data-lang="en">00 — Manifesto</span>
-        <span data-lang="es">00 — Manifiesto</span>
-      </div>
-      <h2 data-lang-block="en">THE<br>WORLD<br>IS HOME</h2>
-      <h2 data-lang-block="es">EL<br>MUNDO<br>ES CASA</h2>
+  <div class="statement-grid">
+    <div class="reveal">
+      <div class="sec-label" id="lbl-manifesto">00 — Manifesto</div>
+      <h2 class="stmt-title" id="stmt-title">THE<br>WORLD<br>IS HOME</h2>
     </div>
-    <div class="statement-right reveal">
-      <p data-lang-block="en">I see the world as <span class="highlight">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I'm part of and choose to make better.</p>
-      <p data-lang-block="es">Veo el mundo como <span class="highlight">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar sin límites. No es una batalla. No es una carrera. Es un sistema vivo del que formo parte y elijo mejorar.</p>
+    <div class="reveal">
+      <p class="stmt-body" id="stmt-body">
+        I see the world as <span class="hl">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I'm part of and choose to make better.
+      </p>
       <div class="lang-bar">
-        <div class="lang-item"><span class="lang-label">ES</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div></div></div>
-        <div class="lang-item"><span class="lang-label">EN</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
-        <div class="lang-item"><span class="lang-label">DE</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
-        <div class="lang-item"><span class="lang-label">中文</span><div class="lang-level"><div class="lang-dot filled"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div><div class="lang-dot"></div></div></div>
+        <div class="lang-item"><span class="lang-lbl">ES</span><div class="lang-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div></div>
+        <div class="lang-item"><span class="lang-lbl">EN</span><div class="lang-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div class="lang-item"><span class="lang-lbl">DE</span><div class="lang-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div class="lang-item"><span class="lang-lbl">中文</span><div class="lang-dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
       </div>
     </div>
   </div>
@@ -454,152 +336,124 @@
 
 <!-- SYSTEMS -->
 <section id="systems">
-  <div class="section-label reveal">
-    <span data-lang="en">01 — Systems</span>
-    <span data-lang="es">01 — Sistemas</span>
-  </div>
+  <div class="sec-label reveal" id="lbl-systems">01 — Systems</div>
   <div class="systems-grid">
-    <div class="system-cell reveal" data-binary="01110100 01110010 01100001 01100100 01100101">
-      <span class="system-number">01.01</span>
-      <h3 class="system-title">TRADING<br>& BOTS</h3>
-      <p class="system-desc" data-lang-block="en">Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.</p>
-      <p class="system-desc" data-lang-block="es">Trader activo en Bybit. Construyendo bots con IA que operan autónomamente. Caos de mercado convertido en lógica ejecutable.</p>
-      <span class="system-tag">Finanzas</span>
+    <div class="sys-cell reveal" data-bin="01110100 01110010 01100001 01100100 01100101">
+      <span class="sys-num">01.01</span>
+      <h3 class="sys-title">TRADING<br>& BOTS</h3>
+      <p class="sys-desc" id="sd-01">Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.</p>
+      <span class="sys-tag">Finanzas</span>
     </div>
-    <div class="system-cell reveal" data-binary="01110111 01100101 01100010 00110011">
-      <span class="system-number">01.02</span>
-      <h3 class="system-title">WEB3<br>BLOCKCHAIN</h3>
-      <p class="system-desc" data-lang-block="en">Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.</p>
-      <p class="system-desc" data-lang-block="es">Tokens, contratos inteligentes, sistemas descentralizados. Construyendo antes de que sea tendencia.</p>
-      <span class="system-tag">Web3</span>
+    <div class="sys-cell reveal" data-bin="01110111 01100101 01100010 00110011">
+      <span class="sys-num">01.02</span>
+      <h3 class="sys-title">WEB3<br>BLOCKCHAIN</h3>
+      <p class="sys-desc" id="sd-02">Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.</p>
+      <span class="sys-tag">Web3</span>
     </div>
-    <div class="system-cell reveal" data-binary="01101100 01101001 01101110 01110101 01111000">
-      <span class="system-number">01.03</span>
-      <h3 class="system-title">LINUX<br>OS DEV</h3>
-      <p class="system-desc" data-lang-block="en">Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.</p>
-      <p class="system-desc" data-lang-block="es">OS personalizado multi-dispositivo. Redes privadas, seguridad de base. Posee tu stack — posee tu libertad.</p>
-      <span class="system-tag">Sistemas</span>
+    <div class="sys-cell reveal" data-bin="01101100 01101001 01101110 01110101 01111000">
+      <span class="sys-num">01.03</span>
+      <h3 class="sys-title">LINUX<br>OS DEV</h3>
+      <p class="sys-desc" id="sd-03">Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.</p>
+      <span class="sys-tag">Sistemas</span>
     </div>
-    <div class="system-cell reveal" data-binary="01101000 01101111 01101101 01100101">
-      <span class="system-number">01.04</span>
-      <h3 class="system-title">DOMÓTICA<br>& IOT</h3>
-      <p class="system-desc" data-lang-block="en">Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.</p>
-      <p class="system-desc" data-lang-block="es">Sistemas electrónicos que hacen los espacios inteligentes. De sensores a automatización — entornos que protegen.</p>
-      <span class="system-tag">Electrónica</span>
+    <div class="sys-cell reveal" data-bin="01101000 01101111 01101101 01100101">
+      <span class="sys-num">01.04</span>
+      <h3 class="sys-title">DOMÓTICA<br>& IOT</h3>
+      <p class="sys-desc" id="sd-04">Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.</p>
+      <span class="sys-tag">Electrónica</span>
     </div>
-    <div class="system-cell reveal" data-binary="01110011 01100101 01100011 01110101 01110010 01100101">
-      <span class="system-number">01.05</span>
-      <h3 class="system-title">CYBER<br>SECURITY</h3>
-      <p class="system-desc" data-lang-block="en">Security is not a feature. It's a foundation. Privacy and integrity as non-negotiable defaults.</p>
-      <p class="system-desc" data-lang-block="es">La seguridad no es una función. Es la base. Privacidad e integridad como valores predeterminados innegociables.</p>
-      <span class="system-tag">Seguridad</span>
+    <div class="sys-cell reveal" data-bin="01110011 01100101 01100011 01110101 01110010 01100101">
+      <span class="sys-num">01.05</span>
+      <h3 class="sys-title">CYBER<br>SECURITY</h3>
+      <p class="sys-desc" id="sd-05">Security is not a feature. It's a foundation. Privacy and integrity as non-negotiable defaults.</p>
+      <span class="sys-tag">Seguridad</span>
     </div>
-    <div class="system-cell reveal" data-binary="01110011 01100101 01101100 01100110">
-      <span class="system-number">01.06</span>
-      <h3 class="system-title">SELF<br>MASTERY</h3>
-      <p class="system-desc" data-lang-block="en">~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.</p>
-      <p class="system-desc" data-lang-block="es">~2 años de desarrollo personal. Saltos cuánticos. Despertares reales. El sistema más complejo que construyo soy yo mismo.</p>
-      <span class="system-tag">Humano</span>
+    <div class="sys-cell reveal" data-bin="01110011 01100101 01101100 01100110">
+      <span class="sys-num">01.06</span>
+      <h3 class="sys-title">SELF<br>MASTERY</h3>
+      <p class="sys-desc" id="sd-06">~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.</p>
+      <span class="sys-tag">Humano</span>
     </div>
   </div>
 </section>
 
 <!-- PHILOSOPHY -->
-<section id="philosophy">
-  <p class="philosophy-quote reveal">
-    <span data-lang="en">"SYSTEMS DON'T FAIL.<br>ARCHITECTS DO."</span>
-    <span data-lang="es">"LOS SISTEMAS NO FALLAN.<br>LOS ARQUITECTOS SÍ."</span>
-  </p>
-  <p class="philosophy-sub reveal">
-    <span data-lang="en">Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.</span>
-    <span data-lang="es">Todo problema es un problema de arquitectura.<br>Toda solución es un sistema esperando ser diseñado.</span>
-  </p>
-</section>
+<div class="phil-wrap" id="philosophy">
+  <p class="phil-quote reveal" id="phil-q">"SYSTEMS DON'T FAIL.<br>ARCHITECTS DO."</p>
+  <p class="phil-sub reveal" id="phil-s">Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.</p>
+</div>
 
 <!-- ORBIT -->
-<section id="orbit" style="padding-top:80px;">
-  <div class="section-label reveal">
-    <span data-lang="en">02 — Active Orbit</span>
-    <span data-lang="es">02 — Órbita Activa</span>
-  </div>
-  <div class="projects-list reveal">
-    <div class="project-row" data-morse="– · · · / · · / ·– / – –">
-      <span class="project-num">001</span>
-      <div class="project-info">
+<section id="orbit">
+  <div class="sec-label reveal" id="lbl-orbit">02 — Active Orbit</div>
+  <div class="proj-list reveal">
+    <div class="proj-row" data-morse="– · · · / · · / ·– / – –">
+      <span class="proj-num">001</span>
+      <div class="proj-info">
         <h3>TRADING BOT AI</h3>
-        <p data-lang-block="en">Autonomous system with ML signals — Bybit integration</p>
-        <p data-lang-block="es">Sistema autónomo con señales ML — integración Bybit</p>
+        <p id="pd-01">Autonomous system with ML signals — Bybit integration</p>
       </div>
-      <span class="project-status active"><span data-lang="en">Active</span><span data-lang="es">Activo</span></span>
+      <span class="proj-status on" id="ps-01">Active</span>
     </div>
-    <div class="project-row" data-morse="·· / – / · / · · / ·–·">
-      <span class="project-num">002</span>
-      <div class="project-info">
+    <div class="proj-row" data-morse="·· / – / · / · · / ·–·">
+      <span class="proj-num">002</span>
+      <div class="proj-info">
         <h3>CYBERSECURITY FIRM</h3>
-        <p data-lang-block="en">Seed planted. Landing live. Team forming. Return: 2 years.</p>
-        <p data-lang-block="es">Semilla plantada. Landing en vivo. Equipo en formación. Regreso: 2 años.</p>
+        <p id="pd-02">Seed planted. Landing live. Team forming. Return: 2 years.</p>
       </div>
-      <span class="project-status"><span data-lang="en">Seeded</span><span data-lang="es">Sembrado</span></span>
+      <span class="proj-status" id="ps-02">Seeded</span>
     </div>
-    <div class="project-row" data-morse="·–·· / ·· / –· / · · ·">
-      <span class="project-num">003</span>
-      <div class="project-info">
+    <div class="proj-row" data-morse="·–·· / ·· / –· / · · ·">
+      <span class="proj-num">003</span>
+      <div class="proj-info">
         <h3>CUSTOM LINUX OS</h3>
-        <p data-lang-block="en">Multi-device OS — private network ready, security native</p>
-        <p data-lang-block="es">OS multi-dispositivo — listo para redes privadas, seguridad nativa</p>
+        <p id="pd-03">Multi-device OS — private network ready, security native</p>
       </div>
-      <span class="project-status active"><span data-lang="en">Active</span><span data-lang="es">Activo</span></span>
+      <span class="proj-status on" id="ps-03">Active</span>
     </div>
-    <div class="project-row" data-morse="–·– · · / · / –– · / ·––">
-      <span class="project-num">004</span>
-      <div class="project-info">
+    <div class="proj-row" data-morse="–·– / · / –– / ·––">
+      <span class="proj-num">004</span>
+      <div class="proj-info">
         <h3>WEB3 INFRASTRUCTURE</h3>
-        <p data-lang-block="en">Token systems, blockchain architecture, protocol design</p>
-        <p data-lang-block="es">Sistemas de tokens, arquitectura blockchain, diseño de protocolos</p>
+        <p id="pd-04">Token systems, blockchain architecture, protocol design</p>
       </div>
-      <span class="project-status"><span data-lang="en">Building</span><span data-lang="es">Construyendo</span></span>
+      <span class="proj-status" id="ps-04">Building</span>
     </div>
-    <div class="project-row" data-morse="·–· / · / – / / · / – / ·––">
-      <span class="project-num">005</span>
-      <div class="project-info">
+    <div class="proj-row" data-morse="·–· / · / – / · / –">
+      <span class="proj-num">005</span>
+      <div class="proj-info">
         <h3>PRIVATE NETWORK</h3>
-        <p data-lang-block="en">Sovereign infrastructure — encrypted, autonomous, owned</p>
-        <p data-lang-block="es">Infraestructura soberana — cifrada, autónoma, propia</p>
+        <p id="pd-05">Sovereign infrastructure — encrypted, autonomous, owned</p>
       </div>
-      <span class="project-status"><span data-lang="en">Building</span><span data-lang="es">Construyendo</span></span>
+      <span class="proj-status" id="ps-05">Building</span>
     </div>
   </div>
 </section>
 
 <!-- SIGNAL -->
-<section>
-  <div id="signal">
-    <div class="signal-left reveal">
-      <div class="section-label">
-        <span data-lang="en">03 — Signal</span>
-        <span data-lang="es">03 — Señal</span>
-      </div>
-      <h2 data-lang-block="en">LET'S<br>BUILD.</h2>
-      <h2 data-lang-block="es">A<br>CONSTRUIR.</h2>
-      <p data-lang-block="en">Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.</p>
-      <p data-lang-block="es">¿Construyendo algo real — sistemas, infraestructura, nuevos paradigmas? Quiero escucharte. Sin presentaciones. Sin relleno. Solo constructores.</p>
+<section id="signal">
+  <div class="signal-grid">
+    <div class="reveal">
+      <div class="sec-label" id="lbl-signal">03 — Signal</div>
+      <h2 class="sig-title" id="sig-title">LET'S<br>BUILD.</h2>
+      <p class="sig-body" id="sig-body">Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.</p>
     </div>
-    <div class="signal-right reveal" style="padding-top:8px;">
+    <div class="reveal" style="padding-top:8px;">
       <a class="contact-line" href="mailto:jesus@jesustorres.dev">
-        <span class="contact-label">Email</span>
-        <span class="contact-value">jesus@jesustorres.dev</span>
+        <span class="c-label">Email</span>
+        <span class="c-value">jesus@jesustorres.dev</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
-        <span class="contact-label">GitHub</span>
-        <span class="contact-value">github.com/jesustorres</span>
+        <span class="c-label">GitHub</span>
+        <span class="c-value">github.com/jesustorres</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
-        <span class="contact-label">Telegram</span>
-        <span class="contact-value">@jesustorres</span>
+        <span class="c-label">Telegram</span>
+        <span class="c-value">@jesustorres</span>
       </a>
       <a class="contact-line" href="#" target="_blank">
-        <span class="contact-label">Bybit</span>
-        <span class="contact-value" style="font-size:13px;color:var(--muted);">// trader in the field</span>
+        <span class="c-label">Bybit</span>
+        <span class="c-value" style="font-size:13px;color:var(--muted);">// trader in the field</span>
       </a>
     </div>
   </div>
@@ -607,114 +461,226 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 — JT</p>
-  <!-- EASTER EGG 5: invisible footer message -->
-  <p class="footer-egg">// compiled at 24.0277°N · all rights reserved to the architect · run ./jesustorres --init</p>
-  <p style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.08);letter-spacing:0.15em;">
-    <span data-lang="en">run ./jesustorres --init</span>
-    <span data-lang="es">ejecutar ./jesustorres --inicio</span>
-  </p>
+  <p class="foot-p">© 2026 — JT</p>
+  <p class="foot-egg">// compiled at 24.0277°N · all rights reserved to the architect · run ./jesustorres --init</p>
+  <p class="foot-p" id="foot-cmd">run ./jesustorres --init</p>
 </footer>
 
 <script>
-// ── LANG ──
-function setLang(lang) {
-  document.body.classList.remove('en','es');
-  document.body.classList.add(lang);
-  document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  document.getElementById('btn-es').classList.toggle('active', lang==='es');
-}
-
-// ── NAV SCROLL ──
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 60));
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e,i) => {
-    if(e.isIntersecting) {
-      setTimeout(()=>e.target.classList.add('visible'), i*80);
-      observer.unobserve(e.target);
-    }
-  });
-}, {threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-
-// ── PARALLAX GLOW ──
-document.addEventListener('mousemove', (e) => {
-  const glow = document.getElementById('glow');
-  const x = (e.clientX/innerWidth - 0.5)*60;
-  const y = (e.clientY/innerHeight - 0.5)*60;
-  glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-});
-
-// ── TERMINAL CONTENT ──
-const lines = {
-  en: [
-    ['cmd','> whoami'],
-    ['out','  jesustorres — builder, trader, architect, 38'],
-    ['cmd','> ls /systems'],
-    ['out','  trading_bot/  web3/  linux_os/  domotica/  cybersec/  self/'],
-    ['cmd','> cat /etc/philosophy'],
-    ['out','  "Systems don\'t fail. Architects do."'],
-    ['cmd','> ping world --count 1'],
-    ['out','  64 bytes from world: icmp_seq=38 ttl=64 time=0.38ms'],
-    ['out','  // home: confirmed. status: building.'],
-    ['cmd','> _'],
-  ],
-  es: [
-    ['cmd','> whoami'],
-    ['out','  jesustorres — constructor, trader, arquitecto, 38'],
-    ['cmd','> ls /sistemas'],
-    ['out','  bot_trading/  web3/  linux_os/  domotica/  cibersec/  self/'],
-    ['cmd','> cat /etc/filosofia'],
-    ['out','  "Los sistemas no fallan. Los arquitectos sí."'],
-    ['cmd','> ping mundo --count 1'],
-    ['out','  64 bytes desde mundo: icmp_seq=38 ttl=64 time=0.38ms'],
-    ['out','  // casa: confirmada. estado: construyendo.'],
-    ['cmd','> _'],
-  ]
+// ── TRANSLATIONS ──
+const T = {
+  en: {
+    eyebrow:       'Builder · Trader · Architect · Node_38',
+    heroStmt:      'I build systems. Everything else is consequence.',
+    scrollLbl:     'Scroll',
+    lblManifesto:  '00 — Manifesto',
+    stmtTitle:     'THE<br>WORLD<br>IS HOME',
+    stmtBody:      'I see the world as <span class="hl">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I\'m part of and choose to make better.',
+    lblSystems:    '01 — Systems',
+    sd01: 'Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.',
+    sd02: 'Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.',
+    sd03: 'Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.',
+    sd04: 'Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.',
+    sd05: 'Security is not a feature. It\'s a foundation. Privacy and integrity as non-negotiable defaults.',
+    sd06: '~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.',
+    philQ:         '"SYSTEMS DON\'T FAIL.<br>ARCHITECTS DO."',
+    philS:         'Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.',
+    lblOrbit:      '02 — Active Orbit',
+    pd01: 'Autonomous system with ML signals — Bybit integration',
+    pd02: 'Seed planted. Landing live. Team forming. Return: 2 years.',
+    pd03: 'Multi-device OS — private network ready, security native',
+    pd04: 'Token systems, blockchain architecture, protocol design',
+    pd05: 'Sovereign infrastructure — encrypted, autonomous, owned',
+    ps01:'Active', ps02:'Seeded', ps03:'Active', ps04:'Building', ps05:'Building',
+    lblSignal:     '03 — Signal',
+    sigTitle:      'LET\'S<br>BUILD.',
+    sigBody:       'Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.',
+    footCmd:       'run ./jesustorres --init',
+    nlSys:'Systems', nlPhi:'Philosophy', nlOrb:'Orbit',
+    termHdr: '// unauthorized access detected — just kidding. welcome.',
+    termLines: [
+      ['cmd','> whoami'],['out','  jesustorres — builder, trader, architect, 38'],
+      ['cmd','> ls /systems'],['out','  trading_bot/  web3/  linux_os/  domotica/  cybersec/  self/'],
+      ['cmd','> cat /etc/philosophy'],['out','  "Systems don\'t fail. Architects do."'],
+      ['cmd','> ping world --count 1'],['out','  64 bytes from world: icmp_seq=38 ttl=64 time=0.38ms'],
+      ['out','  // home: confirmed. status: building.'],['cmd','> _'],
+    ]
+  },
+  es: {
+    eyebrow:       'Constructor · Trader · Arquitecto · Nodo_38',
+    heroStmt:      'Construyo sistemas. El resto es consecuencia.',
+    scrollLbl:     'Bajar',
+    lblManifesto:  '00 — Manifiesto',
+    stmtTitle:     'EL<br>MUNDO<br>ES CASA',
+    stmtBody:      'Veo el mundo como <span class="hl">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar sin límites. No es una batalla. No es una carrera. Es un sistema vivo del que formo parte y elijo mejorar.',
+    lblSystems:    '01 — Sistemas',
+    sd01: 'Trader activo en Bybit. Construyendo bots con IA que operan autónomamente. Caos de mercado convertido en lógica ejecutable.',
+    sd02: 'Tokens, contratos inteligentes, sistemas descentralizados. Construyendo antes de que sea tendencia.',
+    sd03: 'OS personalizado multi-dispositivo. Redes privadas, seguridad de base. Posee tu stack — posee tu libertad.',
+    sd04: 'Sistemas electrónicos que hacen los espacios inteligentes. De sensores a automatización — entornos que protegen.',
+    sd05: 'La seguridad no es una función. Es la base. Privacidad e integridad como valores innegociables.',
+    sd06: '~2 años de desarrollo personal. Saltos cuánticos. Despertares reales. El sistema más complejo que construyo soy yo mismo.',
+    philQ:         '"LOS SISTEMAS NO FALLAN.<br>LOS ARQUITECTOS SÍ."',
+    philS:         'Todo problema es un problema de arquitectura.<br>Toda solución es un sistema esperando ser diseñado.',
+    lblOrbit:      '02 — Órbita Activa',
+    pd01: 'Sistema autónomo con señales ML — integración Bybit',
+    pd02: 'Semilla plantada. Landing en vivo. Equipo en formación. Regreso: 2 años.',
+    pd03: 'OS multi-dispositivo — listo para redes privadas, seguridad nativa',
+    pd04: 'Sistemas de tokens, arquitectura blockchain, diseño de protocolos',
+    pd05: 'Infraestructura soberana — cifrada, autónoma, propia',
+    ps01:'Activo', ps02:'Sembrado', ps03:'Activo', ps04:'Construyendo', ps05:'Construyendo',
+    lblSignal:     '03 — Señal',
+    sigTitle:      'A<br>CONSTRUIR.',
+    sigBody:       '¿Construyendo algo real — sistemas, infraestructura, nuevos paradigmas? Quiero escucharte. Sin presentaciones. Sin relleno. Solo constructores.',
+    footCmd:       'ejecutar ./jesustorres --inicio',
+    nlSys:'Sistemas', nlPhi:'Filosofía', nlOrb:'Órbita',
+    termHdr: '// acceso no autorizado detectado — mentira. bienvenido.',
+    termLines: [
+      ['cmd','> whoami'],['out','  jesustorres — constructor, trader, arquitecto, 38'],
+      ['cmd','> ls /sistemas'],['out','  bot_trading/  web3/  linux_os/  domotica/  cibersec/  self/'],
+      ['cmd','> cat /etc/filosofia'],['out','  "Los sistemas no fallan. Los arquitectos sí."'],
+      ['cmd','> ping mundo --count 1'],['out','  64 bytes desde mundo: icmp_seq=38 ttl=64 time=0.38ms'],
+      ['out','  // casa: confirmada. estado: construyendo.'],['cmd','> _'],
+    ]
+  }
 };
 
-function openTerminal() {
-  const overlay = document.getElementById('terminal-overlay');
-  const content = document.getElementById('term-content');
-  const header  = document.getElementById('term-header');
-  const lang = document.body.classList.contains('es') ? 'es' : 'en';
-  header.textContent = lang==='es'
-    ? '// acceso no autorizado detectado — mentira. bienvenido.'
-    : '// unauthorized access detected — just kidding. welcome.';
-  content.innerHTML = '';
-  overlay.classList.add('open');
-  lines[lang].forEach(([type, text], i) => {
-    const el = document.createElement('div');
-    el.className = 'term-line';
-    el.style.animationDelay = (i * 110) + 'ms';
-    el.style.color = type==='cmd' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.45)';
-    el.textContent = text;
-    content.appendChild(el);
+let lang = 'en';
+
+function setLang(l) {
+  lang = l;
+  const t = T[l];
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.getElementById('btn-es').classList.toggle('active', l==='es');
+  document.getElementById('eyebrow').textContent        = t.eyebrow;
+  document.getElementById('hero-stmt').textContent      = t.heroStmt;
+  document.getElementById('scroll-lbl').textContent     = t.scrollLbl;
+  document.getElementById('lbl-manifesto').textContent  = t.lblManifesto;
+  document.getElementById('stmt-title').innerHTML       = t.stmtTitle;
+  document.getElementById('stmt-body').innerHTML        = t.stmtBody;
+  document.getElementById('lbl-systems').textContent    = t.lblSystems;
+  document.getElementById('sd-01').textContent          = t.sd01;
+  document.getElementById('sd-02').textContent          = t.sd02;
+  document.getElementById('sd-03').textContent          = t.sd03;
+  document.getElementById('sd-04').textContent          = t.sd04;
+  document.getElementById('sd-05').textContent          = t.sd05;
+  document.getElementById('sd-06').textContent          = t.sd06;
+  document.getElementById('phil-q').innerHTML           = t.philQ;
+  document.getElementById('phil-s').innerHTML           = t.philS;
+  document.getElementById('lbl-orbit').textContent      = t.lblOrbit;
+  document.getElementById('pd-01').textContent          = t.pd01;
+  document.getElementById('pd-02').textContent          = t.pd02;
+  document.getElementById('pd-03').textContent          = t.pd03;
+  document.getElementById('pd-04').textContent          = t.pd04;
+  document.getElementById('pd-05').textContent          = t.pd05;
+  document.getElementById('ps-01').textContent          = t.ps01;
+  document.getElementById('ps-02').textContent          = t.ps02;
+  document.getElementById('ps-03').textContent          = t.ps03;
+  document.getElementById('ps-04').textContent          = t.ps04;
+  document.getElementById('ps-05').textContent          = t.ps05;
+  document.getElementById('lbl-signal').textContent     = t.lblSignal;
+  document.getElementById('sig-title').innerHTML        = t.sigTitle;
+  document.getElementById('sig-body').textContent       = t.sigBody;
+  document.getElementById('foot-cmd').textContent       = t.footCmd;
+  document.getElementById('nl-sys').textContent         = t.nlSys;
+  document.getElementById('nl-phi').textContent         = t.nlPhi;
+  document.getElementById('nl-orb').textContent         = t.nlOrb;
+}
+
+// ── NAV ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+// ── REVEAL ──
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'), i*80); obs.unobserve(e.target); }
   });
-}
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-function closeTerminal() {
-  document.getElementById('terminal-overlay').classList.remove('open');
-}
+// ── GLOW PARALLAX ──
+document.addEventListener('mousemove', e => {
+  const g = document.getElementById('glow');
+  g.style.transform = `translate(calc(-50% + ${(e.clientX/innerWidth-.5)*60}px), calc(-50% + ${(e.clientY/innerHeight-.5)*60}px))`;
+});
 
-// ── EASTER EGG: Konami Code ──
+// ── GLITCH ──
+const hn = document.getElementById('hero-name');
+let gt = null;
+hn.addEventListener('mouseenter', () => { hn.classList.add('glitch'); gt = setTimeout(()=>hn.classList.remove('glitch'), 600); });
+hn.addEventListener('mouseleave', () => { clearTimeout(gt); hn.classList.remove('glitch'); });
+
+// ── TERMINAL ──
+function openTerm() {
+  const t = T[lang];
+  const hdr = document.getElementById('term-hdr');
+  const body = document.getElementById('term-body');
+  hdr.textContent = t.termHdr;
+  body.innerHTML = '';
+  t.termLines.forEach(([type, text], i) => {
+    const el = document.createElement('div');
+    el.className = 'term-line ' + (type==='cmd' ? 'term-cmd' : 'term-out');
+    el.style.animationDelay = (i*110)+'ms';
+    el.textContent = text;
+    body.appendChild(el);
+  });
+  document.getElementById('terminal').classList.add('open');
+}
+function closeTerm() { document.getElementById('terminal').classList.remove('open'); }
+
+// ── KONAMI ──
 const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let ki = 0;
+// ── MATRIX ──
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+let mActive = false, mFrame = null, mTimer = null;
+
+function startMatrix() {
+  mActive = true;
+  canvas.classList.add('on');
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  const cols = Math.floor(innerWidth/16);
+  const drops = Array(cols).fill(1);
+  const chars = 'JESÚSTORRES01アイウカサタナハ';
+  function draw() {
+    ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    drops.forEach((y,i) => {
+      ctx.fillStyle = i%7===0 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
+      ctx.font = '14px monospace';
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*16, y*16);
+      if(y*16 > canvas.height && Math.random()>0.975) drops[i]=0;
+      drops[i]++;
+    });
+    if(mActive) mFrame = requestAnimationFrame(draw);
+  }
+  draw();
+  mTimer = setTimeout(stopMatrix, 4000);
+}
+function stopMatrix() {
+  mActive=false; canvas.classList.remove('on');
+  cancelAnimationFrame(mFrame); ctx.clearRect(0,0,canvas.width,canvas.height); clearTimeout(mTimer);
+}
+
+// ── NAME CLICK × 5 ──
+let nc = 0;
+hn.addEventListener('click', ()=>{ if(++nc>=5){ nc=0; openTerm(); } });
+
 document.addEventListener('keydown', e => {
   ki = e.key===konami[ki] ? ki+1 : 0;
-  if(ki===konami.length){ ki=0; openTerminal(); }
+  if(ki===konami.length){ ki=0; openTerm(); return; }
+  if(e.key==='Escape') closeTerm();
+  if((e.key==='m'||e.key==='M') && !document.getElementById('terminal').classList.contains('open'))
+    mActive ? stopMatrix() : startMatrix();
 });
 
-// ── EASTER EGG: click name 5x ──
-let nc = 0;
-document.getElementById('hero-name').addEventListener('click', () => {
-  if(++nc>=5){ nc=0; openTerminal(); }
-});
-
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeTerminal(); });
+// ── CONSOLE EGG ──
+console.log(
+  '%c\n     ██╗████████╗\n     ██║╚══██╔══╝\n     ██║   ██║\n██   ██║   ██║\n╚█████╔╝   ██║\n ╚════╝    ╚═╝\n\n  JESÚS TORRES\n  systems don\'t fail.\n  architects do.\n\n  // 24.0277°N  104.6532°W\n  // status: building\n  // update: 270226 \n ',
+  'font-family:monospace;color:#fff;font-size:11px;line-height:1.4'
+);
+console.log('%c// found the source. respect. reach out → torresdevmx@gmail.com', 'font-family:monospace;color:rgba(255,255,255,0.4);font-size:10px');
 </script>
 </body>
 </html>
