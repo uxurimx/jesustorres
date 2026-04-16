@@ -3,41 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Jesús Torres — Digital Architect. I build systems. Everything else is consequence.">
 <meta name="architect" content="jesustorres — systems don't fail.">
-<meta name="status" content="building">
-<meta name="location" content="24.0277N 104.6532W">
-<title>JT</title>
+<title>JT — torresdev.mx</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
+/* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
 :root {
-  --black: #000;
-  --white: #FFF;
-  --line: rgba(255,255,255,0.12);
-  --muted: rgba(255,255,255,0.35);
-  --mono: 'Space Mono', monospace;
-  --display: 'Bebas Neue', sans-serif;
-  --body: 'DM Sans', sans-serif;
+  --bg:       #000;
+  --bg-alt:   #060608;
+  --fg:       #fff;
+  --muted:    rgba(255,255,255,0.35);
+  --muted-hi: rgba(255,255,255,0.60);
+  --line:     rgba(255,255,255,0.09);
+  --card:     rgba(255,255,255,0.025);
+  --card-h:   rgba(255,255,255,0.05);
+  --glow:     rgba(255,255,255,0.03);
+  --noise:    0.7;
+  --mono:     'Space Mono', monospace;
+  --display:  'Bebas Neue', sans-serif;
+  --body:     'DM Sans', sans-serif;
 }
+body.light {
+  --bg:       #F4F3F0;
+  --bg-alt:   #ECEAE6;
+  --fg:       #0D0D0D;
+  --muted:    rgba(0,0,0,0.38);
+  --muted-hi: rgba(0,0,0,0.62);
+  --line:     rgba(0,0,0,0.08);
+  --card:     rgba(0,0,0,0.025);
+  --card-h:   rgba(0,0,0,0.05);
+  --glow:     rgba(0,0,0,0.04);
+  --noise:    0.35;
+}
+
+/* ── BASE ── */
 html { scroll-behavior: smooth; }
 body {
-  background: var(--black);
-  color: var(--white);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--body);
   font-weight: 300;
   overflow-x: hidden;
   cursor: crosshair;
+  transition: background 0.4s, color 0.4s;
 }
 body::before {
   content: '';
   position: fixed; inset: 0; z-index: 9999; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity: 0.7;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: var(--noise);
+  transition: opacity 0.4s;
 }
 ::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--line); }
+a { color: inherit; }
 
 /* ── NAV ── */
 nav {
@@ -47,41 +72,66 @@ nav {
   border-bottom: 1px solid transparent;
   transition: border-color 0.4s, background 0.4s;
 }
-nav.scrolled { border-color: var(--line); background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); }
+nav.scrolled { border-color: var(--line); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(14px); }
 .nav-logo { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; cursor: default; }
-.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
 .nav-links a { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--fg); }
+.nav-controls { display: flex; align-items: center; gap: 8px; }
 
-/* lang toggle */
-.lang-toggle { display: flex; align-items: center; border: 1px solid var(--line); }
-.lang-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; padding: 5px 13px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: background 0.2s, color 0.2s; text-transform: uppercase; }
-.lang-btn.active { background: var(--white); color: var(--black); }
-.lang-sep { width: 1px; height: 26px; background: var(--line); }
+/* lang + theme toggles */
+.toggle-group { display: flex; align-items: center; border: 1px solid var(--line); }
+.tgl-btn { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; padding: 5px 12px; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: background 0.2s, color 0.2s; text-transform: uppercase; }
+.tgl-btn.active { background: var(--fg); color: var(--bg); }
+.tgl-sep { width: 1px; height: 26px; background: var(--line); }
+.theme-btn {
+  width: 32px; height: 32px; background: transparent; border: 1px solid var(--line);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--muted); transition: color 0.2s, border-color 0.2s;
+}
+.theme-btn:hover { color: var(--fg); border-color: var(--fg); }
+.theme-btn svg { width: 13px; height: 13px; }
+
+/* hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 1px; background: var(--muted); transition: all 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--fg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--fg); }
+
+/* mobile menu */
+.mobile-menu {
+  display: none; position: fixed; inset: 0; z-index: 490;
+  background: var(--bg); flex-direction: column; justify-content: center; align-items: center;
+  gap: 32px; padding: 48px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: var(--display); font-size: 48px; letter-spacing: 0.05em; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.mobile-menu a:hover { color: var(--fg); }
+.mobile-menu-controls { display: flex; gap: 16px; margin-top: 24px; }
 
 /* ── HERO ── */
 #hero {
-  min-height: 100vh;
-  display: grid; grid-template-rows: 1fr auto;
-  padding: 0 48px 48px;
-  position: relative; overflow: hidden;
+  min-height: 100vh; display: grid; grid-template-rows: 1fr auto;
+  padding: 0 48px 48px; position: relative; overflow: hidden;
 }
 .grid-bg {
   position: absolute; inset: 0;
-  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 80px 80px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
 }
 .hero-glow {
   position: absolute; width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.035) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
   top: 50%; left: 50%; transform: translate(-50%,-50%);
   pointer-events: none; transition: transform 0.5s ease;
 }
 .hero-content { display: flex; flex-direction: column; justify-content: center; padding-top: 120px; position: relative; z-index: 2; }
 .hero-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.4em; color: var(--muted); text-transform: uppercase; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
 .hero-name {
-  font-family: var(--display); font-size: clamp(72px, 12vw, 180px);
+  font-family: var(--display); font-size: clamp(64px, 12vw, 180px);
   line-height: 0.9; letter-spacing: 0.02em; position: relative;
   opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
   cursor: default; user-select: none;
@@ -89,123 +139,240 @@ nav.scrolled { border-color: var(--line); background: rgba(0,0,0,0.9); backdrop-
 .hero-name span { display: block; }
 .hero-name .last { color: var(--muted); }
 .hero-statement { margin-top: 48px; max-width: 520px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
-.hero-statement p { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.7); font-weight: 300; }
+.hero-statement p { font-size: 18px; line-height: 1.6; color: var(--muted-hi); font-weight: 300; }
 .hero-bottom {
   display: flex; justify-content: space-between; align-items: flex-end;
   position: relative; z-index: 2; opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
 }
 .hero-coords { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.15em; line-height: 1.9; cursor: default; }
-.coord-secret { font-size: 9px; color: rgba(255,255,255,0.04); transition: color 0.6s; margin-top: 2px; }
-.hero-coords:hover .coord-secret { color: rgba(255,255,255,0.25); }
+.coord-secret { font-size: 9px; color: rgba(128,128,128,0.06); transition: color 0.6s; margin-top: 2px; }
+.hero-coords:hover .coord-secret { color: var(--muted); }
 .scroll-ind { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .scroll-ind span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; writing-mode: vertical-rl; }
-.scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3)); animation: pulse 2s ease-in-out infinite; }
+.scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--muted-hi)); animation: pulse 2s ease-in-out infinite; }
 
-/* ── SECTIONS ── */
+/* ── SECTIONS BASE ── */
 section { padding: 120px 48px; border-top: 1px solid var(--line); }
-.sec-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--muted); margin-bottom: 64px; display: flex; align-items: center; gap: 16px; }
+.sec-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 64px;
+  display: flex; align-items: center; gap: 16px;
+}
 .sec-label::after { content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--line); }
 
 /* ── MARQUEE ── */
-.marquee-wrap { padding: 30px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.marquee-track { display: flex; animation: marquee 24s linear infinite; white-space: nowrap; }
-.marquee-track span { font-family: var(--display); font-size: 14px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; padding: 0 44px; }
-.marquee-track .sep { color: rgba(255,255,255,0.12); padding: 0; }
+.marquee-wrap { padding: 28px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.marquee-track { display: flex; animation: marquee 32s linear infinite; white-space: nowrap; }
+.marquee-track span { font-family: var(--display); font-size: 13px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; padding: 0 36px; }
+.marquee-track .sep { color: var(--line); padding: 0; }
 
-/* ── STATEMENT ── */
+/* ── MANIFESTO ── */
 .statement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.stmt-title { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; }
-.stmt-body { font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
-.stmt-body .hl { color: var(--white); font-weight: 500; }
+.stmt-title { font-family: var(--display); font-size: clamp(44px, 6vw, 88px); line-height: 1; letter-spacing: 0.02em; }
+.stmt-body { font-size: 16px; line-height: 1.9; color: var(--muted-hi); margin-bottom: 24px; }
+.stmt-body .hl { color: var(--fg); font-weight: 500; }
 .lang-bar { display: flex; gap: 36px; margin-top: 40px; flex-wrap: wrap; }
 .lang-item { display: flex; flex-direction: column; gap: 8px; }
 .lang-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
 .lang-dots { display: flex; gap: 4px; }
 .dot { width: 20px; height: 2px; background: var(--line); }
-.dot.on { background: var(--white); }
+.dot.on { background: var(--fg); }
+
+/* ── ADVANTAGE ── */
+#advantage { background: var(--bg-alt); }
+.adv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.adv-title { font-family: var(--display); font-size: clamp(56px, 7vw, 108px); line-height: 0.92; letter-spacing: 0.02em; }
+.adv-sub { font-size: 15px; line-height: 1.8; color: var(--muted); margin-top: 28px; max-width: 380px; }
+.adv-note { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; margin-top: 32px; line-height: 1.8; padding-top: 24px; border-top: 1px solid var(--line); }
+.adv-table { width: 100%; border-collapse: collapse; }
+.adv-table-hdr { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border-bottom: 1px solid var(--line); margin-bottom: 0; }
+.adv-hdr-cell { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); padding: 0 0 20px; }
+.adv-hdr-cell:last-child { color: var(--fg); }
+.adv-row { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--line); padding: 22px 0; transition: background 0.2s; gap: 0; }
+.adv-row:hover { background: var(--card); margin: 0 -20px; padding: 22px 20px; }
+.adv-cell { font-size: 14px; line-height: 1.5; }
+.adv-cell.label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+.adv-cell.trad { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 40%, transparent); }
+.adv-cell.jt { color: var(--fg); font-weight: 500; }
+
+/* ── KAIROS ── */
+#kairos { background: var(--bg); position: relative; overflow: hidden; }
+#kairos::before {
+  content: 'KAIROS';
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: var(--display); font-size: clamp(120px, 18vw, 280px);
+  color: transparent; -webkit-text-stroke: 1px var(--line);
+  pointer-events: none; letter-spacing: 0.02em; white-space: nowrap;
+  user-select: none;
+}
+.kairos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; position: relative; z-index: 2; }
+.kairos-title { font-family: var(--display); font-size: clamp(56px, 7vw, 100px); line-height: 0.92; letter-spacing: 0.02em; }
+.kairos-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); padding: 6px 14px; margin-bottom: 24px; }
+.kairos-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--fg); animation: pulse 1.5s ease-in-out infinite; }
+.kairos-desc { font-size: 15px; line-height: 1.85; color: var(--muted-hi); margin-top: 24px; max-width: 400px; }
+.kairos-quote { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.1em; margin-top: 32px; line-height: 1.7; padding-left: 16px; border-left: 2px solid var(--line); }
+.kairos-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 32px; }
+.kai-stat { background: var(--bg); padding: 24px 20px; }
+.kai-stat-n { font-family: var(--display); font-size: 40px; letter-spacing: 0.04em; line-height: 1; }
+.kai-stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.kai-stat-desc { font-size: 12px; line-height: 1.6; color: var(--muted); margin-top: 8px; }
+
+/* kairos terminal */
+.kairos-terminal {
+  background: var(--bg-alt); border: 1px solid var(--line);
+  padding: 28px 32px; font-family: var(--mono); overflow: hidden;
+}
+.kt-header { font-size: 9px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.kt-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display: inline-block; margin-left: 6px; }
+.kt-line { font-size: 12px; line-height: 2; opacity: 0; transition: opacity 0.1s; }
+.kt-line.cmd { color: var(--fg); }
+.kt-line.out { color: var(--muted); padding-left: 4px; }
+.kt-line.sep { color: rgba(128,128,128,0.2); }
+.kt-line.vis { opacity: 1; }
+.kt-cursor { display: inline-block; width: 8px; height: 1px; background: var(--fg); vertical-align: middle; animation: pulse 1s ease-in-out infinite; margin-left: 2px; }
+
+/* ── USE CASES ── */
+#usecases { background: var(--bg-alt); }
+.uc-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 72px; }
+.uc-title { font-family: var(--display); font-size: clamp(48px, 6vw, 92px); line-height: 0.92; letter-spacing: 0.02em; }
+.uc-intro { font-size: 15px; line-height: 1.85; color: var(--muted-hi); align-self: end; }
+.uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.uc-card {
+  background: var(--bg-alt); padding: 40px 36px; position: relative;
+  overflow: hidden; transition: background 0.25s; cursor: default;
+}
+.uc-card:hover { background: var(--card-h); }
+.uc-card::before {
+  content: attr(data-num);
+  position: absolute; right: 20px; top: 16px;
+  font-family: var(--mono); font-size: 9px; color: var(--line);
+  letter-spacing: 0.2em;
+}
+.uc-sym { font-size: 24px; color: var(--muted); margin-bottom: 20px; display: block; line-height: 1; }
+.uc-card-title { font-family: var(--display); font-size: 28px; letter-spacing: 0.04em; line-height: 1.1; margin-bottom: 14px; }
+.uc-card-desc { font-size: 13px; line-height: 1.75; color: var(--muted-hi); margin-bottom: 20px; }
+.uc-example { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; border-top: 1px solid var(--line); padding-top: 16px; }
 
 /* ── SYSTEMS ── */
-.systems-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.systems-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .sys-cell {
-  background: var(--black); padding: 48px 40px;
-  position: relative; overflow: hidden; cursor: default;
-  transition: background 0.3s;
+  background: var(--bg); padding: 44px 36px; position: relative; overflow: hidden;
+  cursor: default; transition: background 0.25s;
 }
-.sys-cell::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.03); opacity: 0; transition: opacity 0.3s; }
-.sys-cell:hover::before { opacity: 1; }
-.sys-cell::after { content: attr(data-bin); position: absolute; bottom: 14px; left: 40px; font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.03); letter-spacing: 0.05em; transition: color 0.5s; pointer-events: none; }
-.sys-cell:hover::after { color: rgba(255,255,255,0.2); }
-.sys-num { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 32px; display: block; }
-.sys-title { font-family: var(--display); font-size: 36px; letter-spacing: 0.05em; line-height: 1; margin-bottom: 16px; }
-.sys-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
-.sys-tag { position: absolute; top: 22px; right: 22px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: rgba(255,255,255,0.12); text-transform: uppercase; }
+.sys-cell:hover { background: var(--card-h); }
+.sys-cell::after { content: attr(data-bin); position: absolute; bottom: 14px; left: 36px; font-family: var(--mono); font-size: 8px; color: transparent; letter-spacing: 0.05em; transition: color 0.5s; pointer-events: none; }
+.sys-cell:hover::after { color: var(--muted); }
+.sys-num { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; margin-bottom: 28px; display: block; }
+.sys-title { font-family: var(--display); font-size: 34px; letter-spacing: 0.05em; line-height: 1; margin-bottom: 14px; }
+.sys-desc { font-size: 13px; line-height: 1.75; color: var(--muted-hi); }
+.sys-tag { position: absolute; top: 20px; right: 20px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; color: var(--line); text-transform: uppercase; }
+
+/* ── STACK ── */
+#stack { background: var(--bg-alt); }
+.stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.stack-group { display: flex; flex-direction: column; gap: 16px; }
+.stack-cat { font-family: var(--mono); font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.stack-item { font-size: 13px; color: var(--muted-hi); line-height: 1.5; display: flex; align-items: center; gap: 8px; }
+.stack-item::before { content: '—'; font-family: var(--mono); font-size: 10px; color: var(--line); flex-shrink: 0; }
+.stack-item.featured { color: var(--fg); font-weight: 500; }
+.stack-item.featured::before { color: var(--muted); }
 
 /* ── PHILOSOPHY ── */
 .phil-wrap { text-align: center; padding: 160px 48px; position: relative; border-top: 1px solid var(--line); }
-.phil-wrap::after { content: '// el sistema más difícil de compilar eres tú mismo'; position: absolute; bottom: 28px; right: 48px; font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.03); letter-spacing: 0.15em; transition: color 0.6s; pointer-events: none; }
-.phil-wrap:hover::after { color: rgba(255,255,255,0.22); }
+.phil-wrap::after { content: '// el sistema más difícil de compilar eres tú mismo'; position: absolute; bottom: 28px; right: 48px; font-family: var(--mono); font-size: 9px; color: transparent; letter-spacing: 0.15em; transition: color 0.6s; pointer-events: none; }
+.phil-wrap:hover::after { color: var(--muted); }
 .phil-quote { font-family: var(--display); font-size: clamp(32px, 5vw, 72px); letter-spacing: 0.05em; line-height: 1.2; max-width: 900px; margin: 0 auto 48px; }
 .phil-sub { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.18em; max-width: 520px; margin: 0 auto; line-height: 1.9; }
 
 /* ── ORBIT ── */
 .proj-list { display: flex; flex-direction: column; }
 .proj-row {
-  display: grid; grid-template-columns: 72px 1fr auto;
-  align-items: center; gap: 40px;
-  padding: 30px 0; border-bottom: 1px solid var(--line);
-  cursor: default; position: relative; transition: padding-left 0.25s;
+  display: grid; grid-template-columns: 64px 1fr auto 100px;
+  align-items: center; gap: 32px; padding: 28px 0;
+  border-bottom: 1px solid var(--line); cursor: pointer;
+  position: relative; transition: padding-left 0.25s, background 0.2s;
 }
-.proj-row:hover { padding-left: 8px; }
-.proj-row::after { content: attr(data-morse); position: absolute; right: 140px; font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.03); letter-spacing: 0.1em; transition: color 0.5s; pointer-events: none; }
-.proj-row:hover::after { color: rgba(255,255,255,0.18); }
-.proj-num { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 0.2em; }
-.proj-info h3 { font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; margin-bottom: 4px; }
+.proj-row:hover { padding-left: 12px; background: var(--card); padding-right: 12px; margin: 0 -12px; }
+.proj-num { font-family: var(--mono); font-size: 10px; color: var(--line); letter-spacing: 0.2em; }
+.proj-info h3 { font-family: var(--display); font-size: 26px; letter-spacing: 0.05em; margin-bottom: 4px; transition: color 0.2s; }
+.proj-row:hover .proj-info h3 { color: var(--fg); }
 .proj-info p { font-size: 13px; color: var(--muted); }
-.proj-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--line); color: var(--muted); flex-shrink: 0; }
-.proj-status.on { border-color: rgba(255,255,255,0.35); color: var(--white); }
+.proj-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 12px; border: 1px solid var(--line); color: var(--muted); text-align: center; flex-shrink: 0; }
+.proj-status.on { border-color: var(--muted-hi); color: var(--fg); }
+.proj-arrow { font-family: var(--mono); font-size: 11px; color: var(--line); transition: color 0.2s, transform 0.2s; }
+.proj-row:hover .proj-arrow { color: var(--fg); transform: translateX(4px); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 6000;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--bg); border: 1px solid var(--line);
+  max-width: 680px; width: 100%; max-height: 85vh;
+  overflow-y: auto; position: relative;
+  animation: fadeUp 0.3s ease;
+}
+.modal-head { padding: 36px 40px 28px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.modal-title { font-family: var(--display); font-size: 48px; letter-spacing: 0.04em; line-height: 1; }
+.modal-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--line); color: var(--muted); flex-shrink: 0; margin-top: 8px; }
+.modal-status.on { border-color: var(--muted-hi); color: var(--fg); }
+.modal-body { padding: 36px 40px; }
+.modal-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: block; }
+.modal-simple { font-size: 16px; line-height: 1.8; color: var(--fg); margin-bottom: 32px; }
+.modal-technical { font-family: var(--mono); font-size: 12px; line-height: 1.8; color: var(--muted-hi); margin-bottom: 32px; padding: 20px; background: var(--card); border-left: 2px solid var(--line); }
+.modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.modal-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--line); color: var(--muted); }
+.modal-usecase { font-size: 13px; line-height: 1.75; color: var(--muted-hi); padding: 20px; background: var(--card); }
+.modal-close { position: absolute; top: 20px; right: 20px; font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; cursor: pointer; background: none; border: 1px solid var(--line); padding: 8px 14px; transition: color 0.2s, border-color 0.2s; }
+.modal-close:hover { color: var(--fg); border-color: var(--fg); }
 
 /* ── SIGNAL ── */
 .signal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-.sig-title { font-family: var(--display); font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: 0.02em; margin-bottom: 32px; }
-.sig-body { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.55); max-width: 380px; }
-.contact-line { display: flex; align-items: center; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; transition: opacity 0.2s; }
-.contact-line:hover { opacity: 0.5; }
-.c-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); width: 76px; flex-shrink: 0; }
-.c-value { font-size: 16px; font-weight: 400; }
+.sig-title { font-family: var(--display); font-size: clamp(44px, 6vw, 88px); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 28px; }
+.sig-body { font-size: 15px; line-height: 1.8; color: var(--muted-hi); max-width: 380px; }
+.contact-line { display: flex; align-items: center; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; transition: opacity 0.2s; cursor: pointer; }
+.contact-line:hover { opacity: 0.55; }
+.c-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); width: 80px; flex-shrink: 0; }
+.c-value { font-size: 15px; font-weight: 400; }
+.cta-group { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+.cta-btn { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border: 1px solid var(--line); background: transparent; color: var(--fg); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+.cta-btn:hover { background: var(--card-h); border-color: var(--muted); }
+.cta-btn span { color: var(--muted); }
 
 /* ── FOOTER ── */
-footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
-.foot-p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.18); }
-.foot-egg { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.025); letter-spacing: 0.18em; white-space: nowrap; cursor: default; user-select: none; transition: color 0.7s; }
-.foot-egg:hover { color: rgba(255,255,255,0.28); }
+footer { padding: 40px 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; position: relative; }
+.foot-p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; color: var(--muted); }
+.foot-egg { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 8px; color: transparent; letter-spacing: 0.18em; white-space: nowrap; cursor: default; user-select: none; transition: color 0.7s; }
+.foot-egg:hover { color: var(--muted); }
 
 /* ── TERMINAL ── */
 #terminal {
   display: none; position: fixed; inset: 0; z-index: 8000;
-  background: rgba(0,0,0,0.96); backdrop-filter: blur(4px);
+  background: color-mix(in srgb, #000 97%, transparent);
   padding: 80px 48px; flex-direction: column; justify-content: center;
 }
 #terminal.open { display: flex; }
 .term-hdr { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.22); letter-spacing: 0.3em; margin-bottom: 40px; }
-.term-line { font-family: var(--mono); font-size: 14px; letter-spacing: 0.05em; line-height: 2.2; opacity: 0; animation: fadeIn 0.05s forwards; }
-.term-cmd { color: rgba(255,255,255,1); }
+.term-line { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; line-height: 2.2; opacity: 0; animation: fadeIn 0.05s forwards; }
+.term-cmd { color: #fff; }
 .term-out { color: rgba(255,255,255,0.42); }
-.term-close { position: absolute; top: 32px; right: 48px; font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; cursor: pointer; background: none; border: 1px solid var(--line); padding: 8px 16px; transition: color 0.2s; }
-.term-close:hover { color: var(--white); }
+.term-close { position: absolute; top: 32px; right: 48px; font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.2em; cursor: pointer; background: none; border: 1px solid rgba(255,255,255,0.12); padding: 8px 16px; transition: color 0.2s; }
+.term-close:hover { color: #fff; }
 
 /* ── MATRIX ── */
 #matrix { position: fixed; inset: 0; z-index: 7000; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
 #matrix.on { opacity: 1; pointer-events: all; }
 
 /* ── GLITCH ── */
-@keyframes glitch1 { 0%{clip-path:inset(40% 0 61% 0);transform:translate(-4px,0)} 20%{clip-path:inset(92% 0 1% 0);transform:translate(4px,0)} 40%{clip-path:inset(43% 0 1% 0);transform:translate(0,0)} 60%{clip-path:inset(25% 0 58% 0);transform:translate(3px,0)} 80%{clip-path:inset(54% 0 7% 0);transform:translate(-3px,0)} 100%{clip-path:inset(58% 0 43% 0);transform:translate(0,0)} }
-@keyframes glitch2 { 0%{clip-path:inset(50% 0 30% 0);transform:translate(4px,0)} 20%{clip-path:inset(10% 0 85% 0);transform:translate(-4px,0)} 40%{clip-path:inset(80% 0 5% 0);transform:translate(0,0)} 60%{clip-path:inset(15% 0 60% 0);transform:translate(-3px,0)} 80%{clip-path:inset(70% 0 10% 0);transform:translate(3px,0)} 100%{clip-path:inset(40% 0 50% 0);transform:translate(0,0)} }
-
-.hero-name.glitch::before,
-.hero-name.glitch::after {
-  content: attr(data-text);
-  position: absolute; top: 0; left: 0; width: 100%;
-  font-family: var(--display); font-size: clamp(72px,12vw,180px); line-height: 0.9; letter-spacing: 0.02em;
+@keyframes glitch1 { 0%{clip-path:inset(40% 0 61% 0);transform:translate(-4px)} 20%{clip-path:inset(92% 0 1% 0);transform:translate(4px)} 40%{clip-path:inset(43% 0 1% 0);transform:none} 60%{clip-path:inset(25% 0 58% 0);transform:translate(3px)} 80%{clip-path:inset(54% 0 7% 0);transform:translate(-3px)} 100%{clip-path:inset(58% 0 43% 0);transform:none} }
+@keyframes glitch2 { 0%{clip-path:inset(50% 0 30% 0);transform:translate(4px)} 20%{clip-path:inset(10% 0 85% 0);transform:translate(-4px)} 40%{clip-path:inset(80% 0 5% 0);transform:none} 60%{clip-path:inset(15% 0 60% 0);transform:translate(-3px)} 80%{clip-path:inset(70% 0 10% 0);transform:translate(3px)} 100%{clip-path:inset(40% 0 50% 0);transform:none} }
+.hero-name.glitch::before, .hero-name.glitch::after {
+  content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%;
+  font-family: var(--display); font-size: clamp(64px,12vw,180px); line-height: 0.9; letter-spacing: 0.02em;
 }
 .hero-name.glitch::before { color: rgba(255,50,50,0.85); animation: glitch1 0.3s steps(1) infinite; }
 .hero-name.glitch::after  { color: rgba(50,220,255,0.85); animation: glitch2 0.3s steps(1) infinite; }
@@ -221,14 +388,42 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
 @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 /* ── MOBILE ── */
-@media(max-width:768px){
-  nav{padding:18px 20px;}
-  .nav-links{gap:14px;}
-  #hero,section{padding-left:24px;padding-right:24px;}
-  .statement-grid,.signal-grid{grid-template-columns:1fr;gap:48px;}
-  .systems-grid{grid-template-columns:1fr;}
-  footer{flex-direction:column;gap:10px;text-align:center;}
-  .proj-row{grid-template-columns:40px 1fr auto;gap:12px;}
+@media (max-width: 900px) {
+  nav { padding: 18px 24px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+
+  #hero, section, .phil-wrap { padding-left: 24px; padding-right: 24px; }
+  section { padding-top: 80px; padding-bottom: 80px; }
+  .phil-wrap { padding: 100px 24px; }
+
+  .statement-grid, .adv-grid, .kairos-grid, .signal-grid, .uc-header { grid-template-columns: 1fr; gap: 48px; }
+  .systems-grid, .uc-grid { grid-template-columns: 1fr; }
+  .stack-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+
+  .adv-row:hover { margin: 0; padding: 22px 0; }
+  .proj-row { grid-template-columns: 40px 1fr auto; gap: 12px; }
+  .proj-arrow { display: none; }
+
+  footer { flex-direction: column; gap: 12px; text-align: center; }
+  .foot-egg { display: none; }
+
+  .modal-head { padding: 24px; }
+  .modal-body { padding: 24px; }
+  .modal-title { font-size: 36px; }
+
+  #terminal { padding: 48px 24px; }
+  .term-close { top: 16px; right: 24px; }
+
+  .kairos-stats { grid-template-columns: 1fr 1fr; }
+  #kairos::before { font-size: 100px; right: -10px; opacity: 0.5; }
+}
+
+@media (max-width: 480px) {
+  .stack-grid { grid-template-columns: 1fr; }
+  .kairos-stats { grid-template-columns: 1fr 1fr; }
+  .adv-table-hdr, .adv-row { grid-template-columns: 1.2fr 1fr 1fr; }
+  .adv-cell { font-size: 12px; }
 }
 </style>
 </head>
@@ -236,28 +431,81 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
 
 <canvas id="matrix"></canvas>
 
+<!-- TERMINAL -->
 <div id="terminal">
   <button class="term-close" onclick="closeTerm()">[ ESC ]</button>
   <div class="term-hdr" id="term-hdr"></div>
   <div id="term-body"></div>
 </div>
 
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">[ ESC ]</button>
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modal-title"></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.2em;margin-top:8px;" id="modal-sub"></div>
+      </div>
+      <div class="modal-status" id="modal-status"></div>
+    </div>
+    <div class="modal-body">
+      <span class="modal-label" id="lbl-overview">Overview</span>
+      <p class="modal-simple" id="modal-simple"></p>
+      <span class="modal-label" id="lbl-tech-arch">Technical Architecture</span>
+      <div class="modal-technical" id="modal-technical"></div>
+      <span class="modal-label" id="lbl-stack">Stack</span>
+      <div class="modal-tags" id="modal-tags"></div>
+      <span class="modal-label" id="lbl-value">Business Value</span>
+      <div class="modal-usecase" id="modal-usecase"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#advantage" onclick="closeMobileMenu()" id="mm-adv">Advantage</a>
+  <a href="#kairos" onclick="closeMobileMenu()" id="mm-kai">Kairos</a>
+  <a href="#systems" onclick="closeMobileMenu()" id="mm-sys">Systems</a>
+  <a href="#orbit" onclick="closeMobileMenu()" id="mm-orb">Orbit</a>
+  <a href="#signal" onclick="closeMobileMenu()" id="mm-sig">Signal</a>
+  <div class="mobile-menu-controls">
+    <div class="toggle-group">
+      <button class="tgl-btn" id="mm-btn-en" onclick="setLang('en')">EN</button>
+      <div class="tgl-sep"></div>
+      <button class="tgl-btn" id="mm-btn-es" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav id="nav">
-  <span class="nav-logo" title="// node initialized">JT — ████████.dev</span>
-  <ul class="nav-links">
-    <li><a href="#systems" id="nl-sys">Systems</a></li>
-    <li><a href="#philosophy" id="nl-phi">Philosophy</a></li>
-    <li><a href="#orbit" id="nl-orb">Orbit</a></li>
-    <li><a href="#signal">Signal</a></li>
-    <li>
-      <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-        <div class="lang-sep"></div>
-        <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+  <span class="nav-logo" title="// node initialized">JT — torresdev.mx</span>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#advantage" id="nl-adv">Advantage</a></li>
+      <li><a href="#kairos" id="nl-kai">Kairos</a></li>
+      <li><a href="#systems" id="nl-sys">Systems</a></li>
+      <li><a href="#orbit" id="nl-orb">Orbit</a></li>
+      <li><a href="#signal" id="nl-sig">Signal</a></li>
+    </ul>
+    <div class="nav-controls">
+      <div class="toggle-group">
+        <button class="tgl-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <div class="tgl-sep"></div>
+        <button class="tgl-btn" id="btn-es" onclick="setLang('es')">ES</button>
       </div>
-    </li>
-  </ul>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+          <path id="theme-half" d="M7 1.5 A5.5 5.5 0 0 1 7 12.5 Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -278,7 +526,7 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
     <div class="hero-coords">
       <div>24.0277° N</div>
       <div>104.6532° W</div>
-      <div class="coord-secret">ALT 1889m · TZ UTC−6 · // sector: known</div>
+      <div class="coord-secret">ALT 1889m · TZ UTC−6 · Durango, MX</div>
     </div>
     <div class="scroll-ind">
       <span id="scroll-lbl">Scroll</span>
@@ -289,31 +537,51 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
 
 <!-- MARQUEE -->
 <div class="marquee-wrap">
-  <div class="marquee-track">
-    <span>Trading Bots</span><span class="sep">/</span>
+  <div class="marquee-track" id="marquee-track">
+    <span>Next.js 15</span><span class="sep">/</span>
+    <span>Claude API</span><span class="sep">/</span>
+    <span>Kairos AI</span><span class="sep">/</span>
+    <span>ESP32</span><span class="sep">/</span>
+    <span>Go</span><span class="sep">/</span>
+    <span>Python</span><span class="sep">/</span>
+    <span>C / C++</span><span class="sep">/</span>
+    <span>Android APK</span><span class="sep">/</span>
     <span>Blockchain</span><span class="sep">/</span>
     <span>Web3</span><span class="sep">/</span>
-    <span>Linux OS</span><span class="sep">/</span>
-    <span>Domótica</span><span class="sep">/</span>
-    <span>Redes Privadas</span><span class="sep">/</span>
-    <span>Self Mastery</span><span class="sep">/</span>
-    <span>Ciberseguridad</span><span class="sep">/</span>
-    <span>Quantum Tech</span><span class="sep">/</span>
-    <span>38 años</span><span class="sep">/</span>
+    <span>Buildroot OS</span><span class="sep">/</span>
     <span>Trading Bots</span><span class="sep">/</span>
+    <span>Ollama</span><span class="sep">/</span>
+    <span>Whisper STT</span><span class="sep">/</span>
+    <span>Domótica</span><span class="sep">/</span>
+    <span>Multi-tenant SaaS</span><span class="sep">/</span>
+    <span>MCP Server</span><span class="sep">/</span>
+    <span>RAG</span><span class="sep">/</span>
+    <span>Neon DB</span><span class="sep">/</span>
+    <span>Bybit</span><span class="sep">/</span>
+    <span>Next.js 15</span><span class="sep">/</span>
+    <span>Claude API</span><span class="sep">/</span>
+    <span>Kairos AI</span><span class="sep">/</span>
+    <span>ESP32</span><span class="sep">/</span>
+    <span>Go</span><span class="sep">/</span>
+    <span>Python</span><span class="sep">/</span>
+    <span>C / C++</span><span class="sep">/</span>
+    <span>Android APK</span><span class="sep">/</span>
     <span>Blockchain</span><span class="sep">/</span>
     <span>Web3</span><span class="sep">/</span>
-    <span>Linux OS</span><span class="sep">/</span>
+    <span>Buildroot OS</span><span class="sep">/</span>
+    <span>Trading Bots</span><span class="sep">/</span>
+    <span>Ollama</span><span class="sep">/</span>
+    <span>Whisper STT</span><span class="sep">/</span>
     <span>Domótica</span><span class="sep">/</span>
-    <span>Redes Privadas</span><span class="sep">/</span>
-    <span>Self Mastery</span><span class="sep">/</span>
-    <span>Ciberseguridad</span><span class="sep">/</span>
-    <span>Quantum Tech</span><span class="sep">/</span>
-    <span>38 años</span><span class="sep">/</span>
+    <span>Multi-tenant SaaS</span><span class="sep">/</span>
+    <span>MCP Server</span><span class="sep">/</span>
+    <span>RAG</span><span class="sep">/</span>
+    <span>Neon DB</span><span class="sep">/</span>
+    <span>Bybit</span><span class="sep">/</span>
   </div>
 </div>
 
-<!-- STATEMENT -->
+<!-- MANIFESTO -->
 <section>
   <div class="statement-grid">
     <div class="reveal">
@@ -334,47 +602,129 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
   </div>
 </section>
 
+<!-- ADVANTAGE -->
+<section id="advantage">
+  <div class="adv-grid">
+    <div class="reveal">
+      <div class="sec-label" id="lbl-adv">01 — Advantage</div>
+      <h2 class="adv-title" id="adv-title">MONTHS<br>BECOME<br>HOURS.</h2>
+      <p class="adv-sub" id="adv-sub">AI-augmented architecture changes the rules completely. I don't just use AI — I build AI. The gap between a conventional team and one architect with the right systems is not marginal. It's an order of magnitude.</p>
+      <p class="adv-note" id="adv-note">// Powered by Claude API · OpenAI · Ollama local · Kairos — my own AI system</p>
+    </div>
+    <div class="reveal">
+      <div class="adv-table-hdr">
+        <div class="adv-hdr-cell" id="adv-h1">Metric</div>
+        <div class="adv-hdr-cell" id="adv-h2">Traditional</div>
+        <div class="adv-hdr-cell" id="adv-h3">JT + AI Agents</div>
+      </div>
+      <div id="adv-rows"></div>
+    </div>
+  </div>
+</section>
+
+<!-- KAIROS -->
+<section id="kairos">
+  <div class="kairos-grid">
+    <div class="reveal">
+      <div class="sec-label" id="lbl-kai">02 — Intelligence</div>
+      <div class="kairos-badge"><span class="kairos-pulse"></span><span id="kai-badge-txt">My own AI · Running</span></div>
+      <h2 class="kairos-title" id="kai-title">KAIROS</h2>
+      <p class="kairos-desc" id="kai-desc">Most developers use AI as a tool. I build AI as infrastructure. Kairos is my personal intelligence system — a custom agent with persistent memory, local LLM execution, and deep integration across every system I build. It's not a chatbot. It's my second brain.</p>
+      <blockquote class="kairos-quote" id="kai-quote">"While others pay for ChatGPT,<br>I run my own."</blockquote>
+      <div class="kairos-stats" id="kai-stats">
+        <div class="kai-stat reveal">
+          <div class="kai-stat-n">153+</div>
+          <div class="kai-stat-label" id="ks-l1">docs indexed</div>
+          <div class="kai-stat-desc" id="ks-d1">Full-text search (FTS5). Knowledge base that grows with every project.</div>
+        </div>
+        <div class="kai-stat reveal">
+          <div class="kai-stat-n">3</div>
+          <div class="kai-stat-label" id="ks-l2">AI backends</div>
+          <div class="kai-stat-desc" id="ks-d2">Claude · OpenAI · Ollama local. Switches by task and context.</div>
+        </div>
+        <div class="kai-stat reveal">
+          <div class="kai-stat-n">∞</div>
+          <div class="kai-stat-label" id="ks-l3">persistent memory</div>
+          <div class="kai-stat-desc" id="ks-d3">Remembers context across sessions. Knows my projects, my style, my decisions.</div>
+        </div>
+        <div class="kai-stat reveal">
+          <div class="kai-stat-n">100%</div>
+          <div class="kai-stat-label" id="ks-l4">local capable</div>
+          <div class="kai-stat-desc" id="ks-d4">Runs fully offline on local LLMs. No cloud dependency. Sovereign intelligence.</div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="kairos-terminal">
+        <div class="kt-header">
+          <span id="kt-hdr-txt">KAIROS — personal AI terminal</span>
+          <div><span class="kt-dot"></span><span class="kt-dot"></span><span class="kt-dot"></span></div>
+        </div>
+        <div id="kt-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="uc-header">
+    <div class="reveal">
+      <div class="sec-label" id="lbl-uc">03 — What I Build</div>
+      <h2 class="uc-title" id="uc-title">YOUR<br>PROBLEM.<br>MY SYSTEM.</h2>
+    </div>
+    <p class="uc-intro reveal" id="uc-intro">Six domains. One architect. Whether you need a full SaaS product, AI automation, hardware systems, or all of the above — I've already built the foundations. We don't start from zero. We start from leverage.</p>
+  </div>
+  <div class="uc-grid" id="uc-grid"></div>
+</section>
+
 <!-- SYSTEMS -->
 <section id="systems">
-  <div class="sec-label reveal" id="lbl-systems">01 — Systems</div>
+  <div class="sec-label reveal" id="lbl-systems">04 — Systems</div>
   <div class="systems-grid">
     <div class="sys-cell reveal" data-bin="01110100 01110010 01100001 01100100 01100101">
-      <span class="sys-num">01.01</span>
+      <span class="sys-num">04.01</span>
       <h3 class="sys-title">TRADING<br>& BOTS</h3>
-      <p class="sys-desc" id="sd-01">Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.</p>
+      <p class="sys-desc" id="sd-01">Active trader on Bybit. Building AI bots with ML signals that operate markets 24/7. Turning chaos into executable, autonomous logic.</p>
       <span class="sys-tag">Finanzas</span>
     </div>
     <div class="sys-cell reveal" data-bin="01110111 01100101 01100010 00110011">
-      <span class="sys-num">01.02</span>
-      <h3 class="sys-title">WEB3<br>BLOCKCHAIN</h3>
-      <p class="sys-desc" id="sd-02">Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.</p>
+      <span class="sys-num">04.02</span>
+      <h3 class="sys-title">WEB3<br>& BLOCKCHAIN</h3>
+      <p class="sys-desc" id="sd-02">Smart contracts, tokens, wallets, decentralized protocols. Building infrastructure-level Web3 before it becomes mainstream.</p>
       <span class="sys-tag">Web3</span>
     </div>
     <div class="sys-cell reveal" data-bin="01101100 01101001 01101110 01110101 01111000">
-      <span class="sys-num">01.03</span>
-      <h3 class="sys-title">LINUX<br>OS DEV</h3>
-      <p class="sys-desc" id="sd-03">Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.</p>
+      <span class="sys-num">04.03</span>
+      <h3 class="sys-title">LINUX<br>& EMBEDDED</h3>
+      <p class="sys-desc" id="sd-03">Custom Buildroot OS for multiple devices. C/C++ firmware for ESP32/Arduino. Private networks, security-native. Own your stack — own your freedom.</p>
       <span class="sys-tag">Sistemas</span>
     </div>
     <div class="sys-cell reveal" data-bin="01101000 01101111 01101101 01100101">
-      <span class="sys-num">01.04</span>
-      <h3 class="sys-title">DOMÓTICA<br>& IOT</h3>
-      <p class="sys-desc" id="sd-04">Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.</p>
+      <span class="sys-num">04.04</span>
+      <h3 class="sys-title">HARDWARE<br>& IOT</h3>
+      <p class="sys-desc" id="sd-04">ESP32, Arduino, Buildroot, Android APKs. Electronic systems that make physical spaces intelligent — from sensors to full automation.</p>
       <span class="sys-tag">Electrónica</span>
     </div>
-    <div class="sys-cell reveal" data-bin="01110011 01100101 01100011 01110101 01110010 01100101">
-      <span class="sys-num">01.05</span>
-      <h3 class="sys-title">CYBER<br>SECURITY</h3>
-      <p class="sys-desc" id="sd-05">Security is not a feature. It's a foundation. Privacy and integrity as non-negotiable defaults.</p>
-      <span class="sys-tag">Seguridad</span>
+    <div class="sys-cell reveal" data-bin="01110011 01100001 01100001 01110011">
+      <span class="sys-num">04.05</span>
+      <h3 class="sys-title">SAAS<br>PRODUCTS</h3>
+      <p class="sys-desc" id="sd-05">Full-stack web applications from concept to production. Multi-tenant architectures, auth, real-time, AI-native. Weeks — not months.</p>
+      <span class="sys-tag">Web</span>
     </div>
     <div class="sys-cell reveal" data-bin="01110011 01100101 01101100 01100110">
-      <span class="sys-num">01.06</span>
-      <h3 class="sys-title">SELF<br>MASTERY</h3>
-      <p class="sys-desc" id="sd-06">~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.</p>
-      <span class="sys-tag">Humano</span>
+      <span class="sys-num">04.06</span>
+      <h3 class="sys-title">AI<br>AGENTS</h3>
+      <p class="sys-desc" id="sd-06">Not wrappers. Full agent systems with memory, tool-calling, RAG, and local LLM execution. Including Kairos — my own. Your business gets an intelligence layer.</p>
+      <span class="sys-tag">Inteligencia</span>
     </div>
   </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="sec-label reveal" id="lbl-stack-sec">05 — Full Stack</div>
+  <div class="stack-grid reveal" id="stack-grid"></div>
 </section>
 
 <!-- PHILOSOPHY -->
@@ -385,76 +735,45 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
 
 <!-- ORBIT -->
 <section id="orbit">
-  <div class="sec-label reveal" id="lbl-orbit">02 — Active Orbit</div>
-  <div class="proj-list reveal">
-    <div class="proj-row" data-morse="– · · · / · · / ·– / – –">
-      <span class="proj-num">001</span>
-      <div class="proj-info">
-        <h3>TRADING BOT AI</h3>
-        <p id="pd-01">Autonomous system with ML signals — Bybit integration</p>
-      </div>
-      <span class="proj-status on" id="ps-01">Active</span>
-    </div>
-    <div class="proj-row" data-morse="·· / – / · / · · / ·–·">
-      <span class="proj-num">002</span>
-      <div class="proj-info">
-        <h3>CYBERSECURITY FIRM</h3>
-        <p id="pd-02">Seed planted. Landing live. Team forming. Return: 2 years.</p>
-      </div>
-      <span class="proj-status" id="ps-02">Seeded</span>
-    </div>
-    <div class="proj-row" data-morse="·–·· / ·· / –· / · · ·">
-      <span class="proj-num">003</span>
-      <div class="proj-info">
-        <h3>CUSTOM LINUX OS</h3>
-        <p id="pd-03">Multi-device OS — private network ready, security native</p>
-      </div>
-      <span class="proj-status on" id="ps-03">Active</span>
-    </div>
-    <div class="proj-row" data-morse="–·– / · / –– / ·––">
-      <span class="proj-num">004</span>
-      <div class="proj-info">
-        <h3>WEB3 INFRASTRUCTURE</h3>
-        <p id="pd-04">Token systems, blockchain architecture, protocol design</p>
-      </div>
-      <span class="proj-status" id="ps-04">Building</span>
-    </div>
-    <div class="proj-row" data-morse="·–· / · / – / · / –">
-      <span class="proj-num">005</span>
-      <div class="proj-info">
-        <h3>PRIVATE NETWORK</h3>
-        <p id="pd-05">Sovereign infrastructure — encrypted, autonomous, owned</p>
-      </div>
-      <span class="proj-status" id="ps-05">Building</span>
-    </div>
-  </div>
+  <div class="sec-label reveal" id="lbl-orbit">06 — Active Orbit</div>
+  <div class="proj-list reveal" id="proj-list"></div>
 </section>
 
 <!-- SIGNAL -->
 <section id="signal">
   <div class="signal-grid">
     <div class="reveal">
-      <div class="sec-label" id="lbl-signal">03 — Signal</div>
+      <div class="sec-label" id="lbl-signal">07 — Signal</div>
       <h2 class="sig-title" id="sig-title">LET'S<br>BUILD.</h2>
-      <p class="sig-body" id="sig-body">Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.</p>
+      <p class="sig-body" id="sig-body">Have a problem worth solving? Building something real — a product, a system, a new paradigm? I work with founders, companies, and visionaries who think in systems. No pitches. No small talk. Just builders.</p>
     </div>
-    <div class="reveal" style="padding-top:8px;">
-      <a class="contact-line" href="mailto:jesus@jesustorres.dev">
+    <div class="reveal">
+      <a class="contact-line" href="mailto:torresdevmx@gmail.com">
         <span class="c-label">Email</span>
-        <span class="c-value">jesus@jesustorres.dev</span>
+        <span class="c-value">torresdevmx@gmail.com</span>
       </a>
-      <a class="contact-line" href="#" target="_blank">
+      <a class="contact-line" href="https://github.com/torresdevmx" target="_blank" rel="noopener">
         <span class="c-label">GitHub</span>
-        <span class="c-value">github.com/jesustorres</span>
+        <span class="c-value">github.com/torresdevmx</span>
       </a>
-      <a class="contact-line" href="#" target="_blank">
+      <a class="contact-line" href="https://t.me/torresdevmx" target="_blank" rel="noopener">
         <span class="c-label">Telegram</span>
-        <span class="c-value">@jesustorres</span>
+        <span class="c-value">@torresdevmx</span>
       </a>
-      <a class="contact-line" href="#" target="_blank">
-        <span class="c-label">Bybit</span>
-        <span class="c-value" style="font-size:13px;color:var(--muted);">// trader in the field</span>
-      </a>
+      <div class="cta-group" style="margin-top:32px;">
+        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=I want to build a product&body=Hi Jesús, I want to build:" id="cta-product">
+          <span id="cta-p-txt">I want to build a product</span>
+          <span>→</span>
+        </a>
+        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=Investment / Partnership&body=Hi Jesús, I'm interested in:" id="cta-invest">
+          <span id="cta-i-txt">Investment / Partnership</span>
+          <span>→</span>
+        </a>
+        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=I need AI automation&body=Hi Jesús, I need to automate:" id="cta-auto">
+          <span id="cta-a-txt">I need AI automation</span>
+          <span>→</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -467,77 +786,242 @@ footer { padding: 48px; border-top: 1px solid var(--line); display: flex; justif
 </footer>
 
 <script>
-// ── TRANSLATIONS ──
+/* ════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════ */
+
+const ADV_ROWS = {
+  en: [
+    { label:'Time to MVP',      trad:'4–6 months',      jt:'24–72 hours'      },
+    { label:'Team required',    trad:'4–10 people',     jt:'1 architect'       },
+    { label:'Cost',             trad:'$50K–$300K',      jt:'Fraction of that'  },
+    { label:'Ownership',        trad:'Vendor lock-in',  jt:'100% yours'        },
+    { label:'Iteration speed',  trad:'Weeks',           jt:'Hours'             },
+    { label:'AI integration',   trad:'Bolted on later', jt:'Native from day 1' },
+  ],
+  es: [
+    { label:'Tiempo a MVP',         trad:'4–6 meses',         jt:'24–72 horas'       },
+    { label:'Equipo requerido',     trad:'4–10 personas',     jt:'1 arquitecto'       },
+    { label:'Costo',                trad:'$50K–$300K',        jt:'Fracción de eso'    },
+    { label:'Propiedad',            trad:'Dependencia vendor', jt:'100% tuyo'         },
+    { label:'Velocidad de cambios', trad:'Semanas',           jt:'Horas'              },
+    { label:'Integración AI',       trad:'Añadida después',   jt:'Nativa desde día 1' },
+  ]
+};
+
+const UC_CASES = {
+  en: [
+    { n:'01', sym:'⬡', title:'Complete SaaS Products', desc:'Full-stack apps from zero to production. Auth, database, real-time, AI — all integrated. Your product, your brand, your code. Not a template. A system.', example:'uxuri · yumm · tatoos' },
+    { n:'02', sym:'◈', title:'AI & WhatsApp Automation', desc:'Systems that find leads, qualify them automatically, and follow up via WhatsApp — without human intervention. 24/7, autonomous, scalable.', example:'mkt — 234 leads/month' },
+    { n:'03', sym:'◎', title:'Autonomous Trading Bots', desc:'Algorithms that read market signals, analyze patterns with ML, and execute trades on Bybit 24/7. Real money. Real automation. No emotion.', example:'Active on Bybit markets' },
+    { n:'04', sym:'⬢', title:'Hardware + IoT Systems', desc:'From ESP32 microcontrollers to custom embedded Linux (Buildroot). Robots, smart spaces, AI-powered audio devices. Software and hardware as one.', example:'roBit · ESP32 · Buildroot OS' },
+    { n:'05', sym:'◉', title:'Real-Time Intelligence', desc:'Geospatial dashboards, business analytics, live data visualization. Built with WebGL, deck.gl, and real-time backends. For analysts and decision-makers.', example:'worldmonitor — global data' },
+    { n:'06', sym:'◫', title:'Custom AI Agents', desc:'Not ChatGPT wrappers. Full agent systems with persistent memory, tool-calling, RAG, and local LLM execution. Your own intelligence infrastructure.', example:'kairos · MCP servers · integrations' },
+  ],
+  es: [
+    { n:'01', sym:'⬡', title:'Productos SaaS Completos', desc:'Apps full-stack de cero a producción. Auth, base de datos, tiempo real, AI — todo integrado. Tu producto, tu marca, tu código. No una plantilla. Un sistema.', example:'uxuri · yumm · tatoos' },
+    { n:'02', sym:'◈', title:'Automatización AI + WhatsApp', desc:'Sistemas que encuentran leads, los califican automáticamente y hacen seguimiento por WhatsApp — sin intervención humana. 24/7, autónomo, escalable.', example:'mkt — 234 leads/mes' },
+    { n:'03', sym:'◎', title:'Bots de Trading Autónomos', desc:'Algoritmos que leen señales de mercado, analizan patrones con ML y ejecutan operaciones en Bybit 24/7. Dinero real. Automatización real. Sin emoción.', example:'Activo en mercados Bybit' },
+    { n:'04', sym:'⬢', title:'Hardware + Sistemas IoT', desc:'Desde microcontroladores ESP32 hasta Linux embebido (Buildroot). Robots, espacios inteligentes, dispositivos de audio con AI. Software y hardware como uno.', example:'roBit · ESP32 · Buildroot OS' },
+    { n:'05', sym:'◉', title:'Inteligencia en Tiempo Real', desc:'Dashboards geoespaciales, analítica empresarial, visualización de datos en vivo. Construido con WebGL, deck.gl y backends en tiempo real.', example:'worldmonitor — datos globales' },
+    { n:'06', sym:'◫', title:'Agentes AI Personalizados', desc:'No wrappers de ChatGPT. Sistemas de agentes completos con memoria persistente, llamada a herramientas, RAG y ejecución local de LLMs.', example:'kairos · servidores MCP · integraciones' },
+  ]
+};
+
+const STACK_GROUPS = {
+  en: [
+    { cat:'Languages', items:['C / C++','Go','Python','JavaScript / TypeScript','Java / Kotlin','Bash / Shell','Solidity'] },
+    { cat:'AI & Models', items:['Claude API ★','OpenAI API','Kairos (own) ★','Ollama (local)','llama3 · gemma2','Whisper.cpp (STT)','Piper TTS','RAG · FTS5'] },
+    { cat:'Frontend & Web', items:['Next.js 15 ★','React','Tailwind CSS','Radix UI','Framer Motion','deck.gl / WebGL','GTK4 (desktop)'] },
+    { cat:'Backend & DB', items:['Node.js','Flask / Python','Drizzle ORM ★','Neon PostgreSQL ★','SQLite','Upstash Redis','Pusher · Convex','Clerk (auth)'] },
+    { cat:'Hardware & Embedded', items:['ESP32 / Arduino ★','Buildroot OS ★','Android APK','Microcontrollers','Embedded Linux','Custom firmware','Sensors & IoT'] },
+    { cat:'Infrastructure', items:['Vercel','Docker','GitHub Actions','MCP Servers ★','Playwright','WebSockets','Bybit API'] },
+    { cat:'Web3', items:['Smart Contracts','ERC-20 / ERC-721','Wallets','DeFi protocols','Blockchain infra','Token systems'] },
+    { cat:'Methodologies', items:['System architecture','AI-first design','Local-first builds','Security by default','Rapid prototyping','Sovereign stacks'] },
+  ],
+  es: [
+    { cat:'Lenguajes', items:['C / C++','Go','Python','JavaScript / TypeScript','Java / Kotlin','Bash / Shell','Solidity'] },
+    { cat:'AI & Modelos', items:['Claude API ★','OpenAI API','Kairos (propio) ★','Ollama (local)','llama3 · gemma2','Whisper.cpp (STT)','Piper TTS','RAG · FTS5'] },
+    { cat:'Frontend & Web', items:['Next.js 15 ★','React','Tailwind CSS','Radix UI','Framer Motion','deck.gl / WebGL','GTK4 (escritorio)'] },
+    { cat:'Backend & BD', items:['Node.js','Flask / Python','Drizzle ORM ★','Neon PostgreSQL ★','SQLite','Upstash Redis','Pusher · Convex','Clerk (auth)'] },
+    { cat:'Hardware & Embebido', items:['ESP32 / Arduino ★','Buildroot OS ★','Android APK','Microcontroladores','Linux embebido','Firmware propio','Sensores & IoT'] },
+    { cat:'Infraestructura', items:['Vercel','Docker','GitHub Actions','Servidores MCP ★','Playwright','WebSockets','Bybit API'] },
+    { cat:'Web3', items:['Smart Contracts','ERC-20 / ERC-721','Wallets','Protocolos DeFi','Infra blockchain','Sistemas de tokens'] },
+    { cat:'Metodologías', items:['Arquitectura de sistemas','Diseño AI-first','Builds local-first','Seguridad de base','Prototipado rápido','Stacks soberanos'] },
+  ]
+};
+
+const PROJECTS = {
+  en: [
+    { id:'uxuri',    num:'001', title:'UXURI',           tagline:'Enterprise Management SaaS',            status:'Active',    on:true,  simple:'A complete business management platform — CRM, marketing automation, real-time dashboards. Built solo. The kind of system companies pay $50K+/year to license.', technical:'Next.js 15 App Router + TypeScript. Multi-tenant architecture, Clerk auth, Neon PostgreSQL + Drizzle ORM, real-time via Pusher, Upstash Redis for queues. Custom MCP server for AI agent integration. Deployed on Vercel.', tech:['Next.js 15','TypeScript','Clerk','Neon DB','Drizzle ORM','Pusher','Upstash Redis','MCP Server','Tailwind','Radix UI'], usecase:'Replaces $50K+/year enterprise subscriptions with a custom, owned system — built in weeks, not months. No vendor dependency. Full control.' },
+    { id:'mkt',      num:'002', title:'MKT AUTOMATION',  tagline:'AI Lead Generation & WhatsApp Outreach', status:'Active',    on:true,  simple:'Finds potential clients on Google Maps, qualifies them automatically with AI, and sends personalized WhatsApp messages — all without human intervention.', technical:'Python stack: Playwright for Maps scraping, WhatsApp Web automation, AI qualification via Ollama/Claude. SQLite → Neon migration for scale. Flask API + async worker queue.', tech:['Python','Playwright','Flask','SQLite','Neon DB','WhatsApp Web','Ollama','Claude API'], usecase:'One person operates a lead generation machine that would normally require a 3-person sales team. 24/7 outreach on autopilot.' },
+    { id:'roBit',    num:'003', title:'ROBIT / AUDIFONOSPRO', tagline:'AI Audio System + ESP32 Hardware', status:'Active',    on:true,  simple:'A smart audio system that listens, understands context, and responds — powered by local AI. Built with custom ESP32 hardware and a GTK4 desktop interface.', technical:'GTK4 desktop app (Python). ESP32 firmware in C++. Whisper.cpp for local speech-to-text. Piper for text-to-speech. Claude API for intelligence layer. Buildroot-based embedded Linux on companion hardware. Phases 1–3 complete.', tech:['Python','C/C++','GTK4','ESP32','Whisper.cpp','Piper TTS','Claude API','Buildroot','Arduino'], usecase:'A fully local, private AI audio assistant. No cloud required. Can run in environments with no internet. Adaptable to industrial, medical, or consumer use cases.' },
+    { id:'kairos',   num:'004', title:'KAIROS',           tagline:'Personal AI Operating System',          status:'Active',    on:true,  simple:'My own AI agent — not a product, an infrastructure layer. It has persistent memory of all my projects, decisions, and knowledge. It advises, analyzes, and executes. It\'s what makes me 10x faster than any team.', technical:'Python CLI + REST API. SQLite with FTS5 for full-text search over 153+ indexed documents. Multiple backends: Claude API, OpenAI, Ollama (local: llama3:8b, llama3.2:3B, gemma2:2b). Persistent session memory. RAG pipeline for project context retrieval.', tech:['Python','SQLite FTS5','RAG','Claude API','OpenAI','Ollama','llama3','gemma2','REST API','CLI'], usecase:'This is the multiplier. Every project I build is augmented by Kairos — it knows my architecture patterns, my decisions, my clients. It\'s the difference between one developer and a team.' },
+    { id:'worldmonitor', num:'005', title:'WORLDMONITOR', tagline:'Geopolitical Intelligence Dashboard',   status:'Building', on:false, simple:'A real-time geopolitical intelligence dashboard. Visualizes global events, conflicts, and market-relevant data on an interactive 3D map — for analysts, traders, and decision-makers.', technical:'React + deck.gl for WebGL geospatial rendering. Convex for real-time serverless backend. Multi-layer visualization: heatmaps, arcs, scatter plots on globe. AI-enriched event classification pipeline.', tech:['React','deck.gl','WebGL','Convex','TypeScript','Claude API','Real-time'], usecase:'Gives traders and analysts a live, AI-enriched view of geopolitical risk — the kind of tooling hedge funds pay six figures for.' },
+    { id:'yumm',     num:'006', title:'YUMM / TATOOS',   tagline:'Multi-Vertical SaaS Catalog',           status:'Live',      on:true,  simple:'One codebase. Two products. A digital catalog/menu SaaS deployed as Yumm (restaurants) and Tatoos (tattoo studios). Multi-tenant, white-label ready, live with users.', technical:'Next.js 15 mono-repo. Single codebase with theme/content configuration per vertical. Clerk auth, Neon DB, Drizzle ORM. Two independent Vercel deployments. Shared component library.', tech:['Next.js 15','Multi-tenant','Clerk','Neon DB','Drizzle ORM','Vercel','TypeScript'], usecase:'One build, infinite verticals. The same system can be redeployed for dentists, real estate agents, lawyers, gyms — any business that needs a digital catalog.' },
+    { id:'trading',  num:'007', title:'TRADING BOT AI',  tagline:'Autonomous Market Operations',          status:'Building', on:false, simple:'An autonomous trading system that reads market signals, analyzes patterns with ML, and executes trades on Bybit 24/7. Real money. Real automation. No emotion.', technical:'Python: Bybit WebSocket API + REST. ML signal generation (pandas, numpy, scikit-learn). Strategy backtesting engine. Risk management module. Telegram alerts + monitoring dashboard.', tech:['Python','Bybit API','WebSocket','pandas','numpy','scikit-learn','Telegram API','PostgreSQL'], usecase:'Turns systematic trading strategies into fully automated execution. The system never sleeps, never panics, never deviates from the strategy.' },
+  ],
+  es: [
+    { id:'uxuri',    num:'001', title:'UXURI',            tagline:'SaaS de Gestión Empresarial',              status:'Activo',     on:true,  simple:'Una plataforma completa de gestión empresarial — CRM, automatización de marketing, dashboards en tiempo real. Construido solo. El tipo de sistema que las empresas pagan $50K+/año en licencias.', technical:'Next.js 15 App Router + TypeScript. Arquitectura multi-tenant, auth con Clerk, Neon PostgreSQL + Drizzle ORM, tiempo real vía Pusher, Upstash Redis para colas. Servidor MCP personalizado para integración de agentes AI. Deploy en Vercel.', tech:['Next.js 15','TypeScript','Clerk','Neon DB','Drizzle ORM','Pusher','Upstash Redis','MCP Server','Tailwind','Radix UI'], usecase:'Reemplaza suscripciones empresariales de $50K+/año con un sistema propio, a medida — construido en semanas, no meses. Sin dependencia de vendor. Control total.' },
+    { id:'mkt',      num:'002', title:'MKT AUTOMATION',   tagline:'Generación de Leads AI + WhatsApp',         status:'Activo',     on:true,  simple:'Encuentra clientes potenciales en Google Maps, los califica automáticamente con AI, y envía mensajes personalizados por WhatsApp — sin intervención humana.', technical:'Stack Python: Playwright para scraping de Maps, automatización de WhatsApp Web, calificación AI vía Ollama/Claude. SQLite → Neon para escala. Flask API + cola de workers asíncrona.', tech:['Python','Playwright','Flask','SQLite','Neon DB','WhatsApp Web','Ollama','Claude API'], usecase:'Una persona opera una máquina de generación de leads que normalmente requiere un equipo de 3 en ventas. Prospección 24/7 en piloto automático.' },
+    { id:'roBit',    num:'003', title:'ROBIT / AUDIFONOSPRO', tagline:'Sistema Audio AI + Hardware ESP32',    status:'Activo',     on:true,  simple:'Un sistema de audio inteligente que escucha, entiende el contexto y responde — con AI local. Construido con hardware ESP32 personalizado e interfaz GTK4 de escritorio.', technical:'App escritorio GTK4 (Python). Firmware ESP32 en C++. Whisper.cpp para STT local. Piper para TTS. Claude API como capa de inteligencia. Linux embebido con Buildroot en hardware complementario. Fases 1–3 completas.', tech:['Python','C/C++','GTK4','ESP32','Whisper.cpp','Piper TTS','Claude API','Buildroot','Arduino'], usecase:'Un asistente de audio AI completamente local y privado. Sin nube requerida. Adaptable a casos de uso industriales, médicos o de consumo.' },
+    { id:'kairos',   num:'004', title:'KAIROS',            tagline:'Sistema Operativo de IA Personal',         status:'Activo',     on:true,  simple:'Mi propio agente AI — no un producto, una capa de infraestructura. Tiene memoria persistente de todos mis proyectos, decisiones y conocimiento. Asesora, analiza y ejecuta.', technical:'CLI Python + REST API. SQLite con FTS5 para búsqueda en texto completo sobre 153+ documentos indexados. Múltiples backends: Claude API, OpenAI, Ollama (local: llama3:8b, llama3.2:3B, gemma2:2b). Memoria de sesión persistente. Pipeline RAG para recuperación de contexto.', tech:['Python','SQLite FTS5','RAG','Claude API','OpenAI','Ollama','llama3','gemma2','REST API','CLI'], usecase:'Este es el multiplicador. Cada proyecto que construyo está aumentado por Kairos — conoce mis patrones de arquitectura, mis decisiones, mis clientes. La diferencia entre un desarrollador y un equipo.' },
+    { id:'worldmonitor', num:'005', title:'WORLDMONITOR',  tagline:'Dashboard de Inteligencia Geopolítica',    status:'Construyendo', on:false, simple:'Dashboard de inteligencia geopolítica en tiempo real. Visualiza eventos globales, conflictos y datos relevantes para mercados en un mapa 3D interactivo — para analistas, traders y tomadores de decisiones.', technical:'React + deck.gl para renderizado geoespacial WebGL. Convex para backend serverless en tiempo real. Visualización multi-capa: mapas de calor, arcos, scatter en globo. Pipeline de clasificación de eventos con AI.', tech:['React','deck.gl','WebGL','Convex','TypeScript','Claude API','Tiempo real'], usecase:'Da a traders y analistas una vista viva y enriquecida con AI del riesgo geopolítico — el tipo de herramienta por la que los hedge funds pagan seis cifras.' },
+    { id:'yumm',     num:'006', title:'YUMM / TATOOS',    tagline:'SaaS Catálogo Multi-Vertical',              status:'En vivo',   on:true,  simple:'Un codebase. Dos productos. SaaS de catálogo digital deployado como Yumm (restaurantes) y Tatoos (estudios de tatuaje). Multi-tenant, white-label, con usuarios reales.', technical:'Monorepo Next.js 15. Un solo codebase con configuración de tema/contenido por vertical. Auth Clerk, Neon DB, Drizzle ORM. Dos deployments independientes en Vercel. Librería de componentes compartida.', tech:['Next.js 15','Multi-tenant','Clerk','Neon DB','Drizzle ORM','Vercel','TypeScript'], usecase:'Un build, verticales infinitas. El mismo sistema puede redesployarse para dentistas, inmobiliarias, abogados, gimnasios — cualquier negocio que necesite un catálogo digital.' },
+    { id:'trading',  num:'007', title:'BOT TRADING AI',   tagline:'Operaciones de Mercado Autónomas',          status:'Construyendo', on:false, simple:'Sistema de trading autónomo que lee señales de mercado, analiza patrones con ML y ejecuta operaciones en Bybit 24/7. Dinero real. Automatización real. Sin emoción.', technical:'Python: Bybit WebSocket API + REST. Generación de señales ML (pandas, numpy, scikit-learn). Motor de backtesting de estrategias. Módulo de gestión de riesgo. Alertas Telegram + dashboard de monitoreo.', tech:['Python','Bybit API','WebSocket','pandas','numpy','scikit-learn','Telegram API','PostgreSQL'], usecase:'Convierte estrategias de trading sistemático en ejecución completamente automatizada. El sistema nunca duerme, nunca entra en pánico, nunca se desvía de la estrategia.' },
+  ]
+};
+
+const KAIROS_TERM = {
+  en: [
+    ['cmd','> kairos --status'],
+    ['out','  backend: claude-sonnet-4-6  ·  docs: 153+  ·  mode: hybrid'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['cmd','> analyze --projects active'],
+    ['out','  uxuri        → deployed  ·  marketing module: 73%'],
+    ['out','  mkt          → 234 leads captured  ·  conversion: 31%'],
+    ['out','  roBit        → phase 3 complete  ·  phase 4: planning'],
+    ['out','  kairos       → this session'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['cmd','> prioritize --today'],
+    ['out','  [1] Close lead: Restaurant client — demo yumm'],
+    ['out','  [2] Deploy uxuri v2 marketing module'],
+    ['out','  [3] Finish roBit phase 4 spec'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['out','  153 docs · 0.6s · confidence: 94%'],
+    ['cmd','> _'],
+  ],
+  es: [
+    ['cmd','> kairos --status'],
+    ['out','  backend: claude-sonnet-4-6  ·  docs: 153+  ·  modo: híbrido'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['cmd','> analizar --proyectos activos'],
+    ['out','  uxuri        → deployado  ·  módulo marketing: 73%'],
+    ['out','  mkt          → 234 leads capturados  ·  conversión: 31%'],
+    ['out','  roBit        → fase 3 completa  ·  fase 4: planeando'],
+    ['out','  kairos       → esta sesión'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['cmd','> priorizar --hoy'],
+    ['out','  [1] Cerrar lead: Cliente restaurante — demo yumm'],
+    ['out','  [2] Deploy uxuri v2 módulo marketing'],
+    ['out','  [3] Terminar spec roBit fase 4'],
+    ['sep','  ──────────────────────────────────────────'],
+    ['out','  153 docs · 0.6s · confianza: 94%'],
+    ['cmd','> _'],
+  ]
+};
+
 const T = {
   en: {
-    eyebrow:       'Builder · Trader · Architect · Node_38',
-    heroStmt:      'I build systems. Everything else is consequence.',
-    scrollLbl:     'Scroll',
-    lblManifesto:  '00 — Manifesto',
-    stmtTitle:     'THE<br>WORLD<br>IS HOME',
-    stmtBody:      'I see the world as <span class="hl">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I\'m part of and choose to make better.',
-    lblSystems:    '01 — Systems',
-    sd01: 'Active trader on Bybit. Building AI bots that operate autonomously. Turning market chaos into executable logic.',
-    sd02: 'Tokens, smart contracts, decentralized systems. Building before it becomes mainstream.',
-    sd03: 'Custom OS for multiple devices. Private networks, security-first. Own your stack — own your freedom.',
-    sd04: 'Electronic systems that make spaces intelligent. From sensors to automation — environments that protect.',
-    sd05: 'Security is not a feature. It\'s a foundation. Privacy and integrity as non-negotiable defaults.',
-    sd06: '~2 years of personal development. Quantum leaps. Real awakenings. The most complex system I build is myself.',
-    philQ:         '"SYSTEMS DON\'T FAIL.<br>ARCHITECTS DO."',
-    philS:         'Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.',
-    lblOrbit:      '02 — Active Orbit',
-    pd01: 'Autonomous system with ML signals — Bybit integration',
-    pd02: 'Seed planted. Landing live. Team forming. Return: 2 years.',
-    pd03: 'Multi-device OS — private network ready, security native',
-    pd04: 'Token systems, blockchain architecture, protocol design',
-    pd05: 'Sovereign infrastructure — encrypted, autonomous, owned',
-    ps01:'Active', ps02:'Seeded', ps03:'Active', ps04:'Building', ps05:'Building',
-    lblSignal:     '03 — Signal',
-    sigTitle:      'LET\'S<br>BUILD.',
-    sigBody:       'Building something real — systems, infrastructure, new paradigms? I want to hear about it. No pitches. No small talk. Just builders.',
-    footCmd:       'run ./jesustorres --init',
-    nlSys:'Systems', nlPhi:'Philosophy', nlOrb:'Orbit',
-    termHdr: '// unauthorized access detected — just kidding. welcome.',
-    termLines: [
+    eyebrow:'Builder · Trader · Architect · Node_38',
+    heroStmt:'I build systems. Everything else is consequence.',
+    scrollLbl:'Scroll',
+    lblManifesto:'00 — Manifesto',
+    stmtTitle:'THE<br>WORLD<br>IS HOME',
+    stmtBody:'I see the world as <span class="hl">my home</span> — a beautiful place to improve, to help, to live deeply and explore without limits. Not a battlefield. Not a race. A living system I\'m part of and choose to make better.',
+    lblAdv:'01 — Advantage',
+    advTitle:'MONTHS<br>BECOME<br>HOURS.',
+    advSub:'AI-augmented architecture changes the rules completely. I don\'t just use AI — I build AI. The gap between a conventional team and one architect with the right systems is not marginal. It\'s an order of magnitude.',
+    advNote:'// Powered by Claude API · OpenAI · Ollama local · Kairos — my own AI system',
+    advH1:'Metric', advH2:'Traditional', advH3:'JT + AI Agents',
+    lblKai:'02 — Intelligence',
+    kaiBadge:'My own AI · Running',
+    kaiTitle:'KAIROS',
+    kaiDesc:'Most developers use AI as a tool. I build AI as infrastructure. Kairos is my personal intelligence system — a custom agent with persistent memory, local LLM execution, and deep integration across every system I build. It\'s not a chatbot. It\'s my second brain.',
+    kaiQuote:'"While others pay for ChatGPT,<br>I run my own."',
+    ksL1:'docs indexed', ksD1:'Full-text search (FTS5). Knowledge base that grows with every project.',
+    ksL2:'AI backends',  ksD2:'Claude · OpenAI · Ollama local. Switches by task and context.',
+    ksL3:'persistent memory', ksD3:'Remembers context across sessions. Knows my projects, my style, my decisions.',
+    ksL4:'local capable', ksD4:'Runs fully offline on local LLMs. No cloud dependency. Sovereign intelligence.',
+    ktHdr:'KAIROS — personal AI terminal',
+    lblUc:'03 — What I Build',
+    ucTitle:'YOUR<br>PROBLEM.<br>MY SYSTEM.',
+    ucIntro:'Six domains. One architect. Whether you need a full SaaS product, AI automation, hardware systems, or all of the above — I\'ve already built the foundations. We don\'t start from zero. We start from leverage.',
+    lblSystems:'04 — Systems',
+    sd01:'Active trader on Bybit. Building AI bots with ML signals that operate markets 24/7. Turning chaos into autonomous executable logic.',
+    sd02:'Smart contracts, tokens, wallets, decentralized protocols. Building infrastructure-level Web3 before it becomes mainstream.',
+    sd03:'Custom Buildroot OS for multiple devices. C/C++ firmware for ESP32/Arduino. Private networks, security-native. Own your stack — own your freedom.',
+    sd04:'ESP32, Arduino, Buildroot, Android APKs. Electronic systems that make physical spaces intelligent — from sensors to full automation.',
+    sd05:'Full-stack web applications from concept to production. Multi-tenant architectures, auth, real-time, AI-native. Weeks — not months.',
+    sd06:'Not wrappers. Full agent systems with memory, tool-calling, RAG, and local LLM execution. Including Kairos — my own.',
+    lblStackSec:'05 — Full Stack',
+    lblPhil:'',
+    philQ:'"SYSTEMS DON\'T FAIL.<br>ARCHITECTS DO."',
+    philS:'Every problem is an architecture problem.<br>Every solution is a system waiting to be designed.',
+    lblOrbit:'06 — Active Orbit',
+    lblSignal:'07 — Signal',
+    sigTitle:'LET\'S<br>BUILD.',
+    sigBody:'Have a problem worth solving? Building something real — a product, a system, a new paradigm? I work with founders, companies, and visionaries who think in systems. No pitches. No small talk. Just builders.',
+    ctaProd:'I want to build a product',
+    ctaInvest:'Investment / Partnership',
+    ctaAuto:'I need AI automation',
+    footCmd:'run ./jesustorres --init',
+    nlAdv:'Advantage', nlKai:'Kairos', nlSys:'Systems', nlOrb:'Orbit', nlSig:'Signal',
+    mmAdv:'Advantage', mmKai:'Kairos', mmSys:'Systems', mmOrb:'Orbit', mmSig:'Signal',
+    modalLblOverview:'Overview', modalLblArch:'Technical Architecture', modalLblStack:'Stack', modalLblValue:'Business Value',
+    termHdr:'// unauthorized access detected — just kidding. welcome, architect.',
+    termLines:[
       ['cmd','> whoami'],['out','  jesustorres — builder, trader, architect, 38'],
-      ['cmd','> ls /systems'],['out','  trading_bot/  web3/  linux_os/  domotica/  cybersec/  self/'],
+      ['cmd','> ls /projects'],['out','  uxuri/  mkt/  roBit/  kairos/  worldmonitor/  yumm/  trading_bot/'],
+      ['cmd','> cat /stack'],['out','  Next.js · Go · Python · C/C++ · Claude API · ESP32 · Buildroot · Web3'],
+      ['cmd','> kairos --brief'],['out','  153 docs indexed · 3 backends · runs local · persistent memory'],
       ['cmd','> cat /etc/philosophy'],['out','  "Systems don\'t fail. Architects do."'],
       ['cmd','> ping world --count 1'],['out','  64 bytes from world: icmp_seq=38 ttl=64 time=0.38ms'],
       ['out','  // home: confirmed. status: building.'],['cmd','> _'],
     ]
   },
   es: {
-    eyebrow:       'Constructor · Trader · Arquitecto · Nodo_38',
-    heroStmt:      'Construyo sistemas. El resto es consecuencia.',
-    scrollLbl:     'Bajar',
-    lblManifesto:  '00 — Manifiesto',
-    stmtTitle:     'EL<br>MUNDO<br>ES CASA',
-    stmtBody:      'Veo el mundo como <span class="hl">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar sin límites. No es una batalla. No es una carrera. Es un sistema vivo del que formo parte y elijo mejorar.',
-    lblSystems:    '01 — Sistemas',
-    sd01: 'Trader activo en Bybit. Construyendo bots con IA que operan autónomamente. Caos de mercado convertido en lógica ejecutable.',
-    sd02: 'Tokens, contratos inteligentes, sistemas descentralizados. Construyendo antes de que sea tendencia.',
-    sd03: 'OS personalizado multi-dispositivo. Redes privadas, seguridad de base. Posee tu stack — posee tu libertad.',
-    sd04: 'Sistemas electrónicos que hacen los espacios inteligentes. De sensores a automatización — entornos que protegen.',
-    sd05: 'La seguridad no es una función. Es la base. Privacidad e integridad como valores innegociables.',
-    sd06: '~2 años de desarrollo personal. Saltos cuánticos. Despertares reales. El sistema más complejo que construyo soy yo mismo.',
-    philQ:         '"LOS SISTEMAS NO FALLAN.<br>LOS ARQUITECTOS SÍ."',
-    philS:         'Todo problema es un problema de arquitectura.<br>Toda solución es un sistema esperando ser diseñado.',
-    lblOrbit:      '02 — Órbita Activa',
-    pd01: 'Sistema autónomo con señales ML — integración Bybit',
-    pd02: 'Semilla plantada. Landing en vivo. Equipo en formación. Regreso: 2 años.',
-    pd03: 'OS multi-dispositivo — listo para redes privadas, seguridad nativa',
-    pd04: 'Sistemas de tokens, arquitectura blockchain, diseño de protocolos',
-    pd05: 'Infraestructura soberana — cifrada, autónoma, propia',
-    ps01:'Activo', ps02:'Sembrado', ps03:'Activo', ps04:'Construyendo', ps05:'Construyendo',
-    lblSignal:     '03 — Señal',
-    sigTitle:      'A<br>CONSTRUIR.',
-    sigBody:       '¿Construyendo algo real — sistemas, infraestructura, nuevos paradigmas? Quiero escucharte. Sin presentaciones. Sin relleno. Solo constructores.',
-    footCmd:       'ejecutar ./jesustorres --inicio',
-    nlSys:'Sistemas', nlPhi:'Filosofía', nlOrb:'Órbita',
-    termHdr: '// acceso no autorizado detectado — mentira. bienvenido.',
-    termLines: [
+    eyebrow:'Constructor · Trader · Arquitecto · Nodo_38',
+    heroStmt:'Construyo sistemas. El resto es consecuencia.',
+    scrollLbl:'Bajar',
+    lblManifesto:'00 — Manifiesto',
+    stmtTitle:'EL<br>MUNDO<br>ES CASA',
+    stmtBody:'Veo el mundo como <span class="hl">mi casa</span> — un lugar hermoso que puedo mejorar y ayudar. Vivir experiencias, conocer, explorar sin límites. No es una batalla. No es una carrera. Es un sistema vivo del que formo parte y elijo mejorar.',
+    lblAdv:'01 — Ventaja',
+    advTitle:'LOS MESES<br>SE VUELVEN<br>HORAS.',
+    advSub:'La arquitectura aumentada con AI cambia las reglas completamente. No solo uso AI — construyo AI. La brecha entre un equipo convencional y un arquitecto con los sistemas correctos no es marginal. Es un orden de magnitud.',
+    advNote:'// Impulsado por Claude API · OpenAI · Ollama local · Kairos — mi propio sistema AI',
+    advH1:'Métrica', advH2:'Tradicional', advH3:'JT + Agentes AI',
+    lblKai:'02 — Inteligencia',
+    kaiBadge:'Mi propio AI · Activo',
+    kaiTitle:'KAIROS',
+    kaiDesc:'La mayoría de desarrolladores usa AI como herramienta. Yo la construyo como infraestructura. Kairos es mi sistema de inteligencia personal — un agente a medida con memoria persistente, ejecución local de LLMs e integración profunda en cada sistema que construyo. No es un chatbot. Es mi segundo cerebro.',
+    kaiQuote:'"Mientras otros pagan por ChatGPT,<br>yo ejecuto el mío."',
+    ksL1:'documentos indexados', ksD1:'Búsqueda en texto completo (FTS5). Base de conocimiento que crece con cada proyecto.',
+    ksL2:'backends AI',          ksD2:'Claude · OpenAI · Ollama local. Cambia según tarea y contexto.',
+    ksL3:'memoria persistente',  ksD3:'Recuerda contexto entre sesiones. Conoce mis proyectos, mi estilo, mis decisiones.',
+    ksL4:'capaz local',          ksD4:'Corre completamente offline en LLMs locales. Sin dependencia de nube. Inteligencia soberana.',
+    ktHdr:'KAIROS — terminal AI personal',
+    lblUc:'03 — Qué Construyo',
+    ucTitle:'TU<br>PROBLEMA.<br>MI SISTEMA.',
+    ucIntro:'Seis dominios. Un arquitecto. Ya sea que necesites un producto SaaS completo, automatización AI, sistemas de hardware o todo lo anterior — ya construí las bases. No empezamos de cero. Empezamos desde el apalancamiento.',
+    lblSystems:'04 — Sistemas',
+    sd01:'Trader activo en Bybit. Construyendo bots AI con señales ML que operan mercados 24/7. Convirtiendo el caos en lógica autónoma ejecutable.',
+    sd02:'Contratos inteligentes, tokens, wallets, protocolos descentralizados. Construyendo Web3 a nivel de infraestructura antes de que sea tendencia.',
+    sd03:'OS Buildroot personalizado para múltiples dispositivos. Firmware C/C++ para ESP32/Arduino. Redes privadas, seguridad nativa. Posee tu stack — posee tu libertad.',
+    sd04:'ESP32, Arduino, Buildroot, APKs Android. Sistemas electrónicos que hacen los espacios físicos inteligentes — de sensores a automatización completa.',
+    sd05:'Aplicaciones web full-stack de concepto a producción. Arquitecturas multi-tenant, auth, tiempo real, AI-nativas. Semanas — no meses.',
+    sd06:'No wrappers. Sistemas de agentes completos con memoria, llamada a herramientas, RAG y ejecución local de LLMs. Incluyendo Kairos — el mío.',
+    lblStackSec:'05 — Stack Completo',
+    philQ:'"LOS SISTEMAS NO FALLAN.<br>LOS ARQUITECTOS SÍ."',
+    philS:'Todo problema es un problema de arquitectura.<br>Toda solución es un sistema esperando ser diseñado.',
+    lblOrbit:'06 — Órbita Activa',
+    lblSignal:'07 — Señal',
+    sigTitle:'A<br>CONSTRUIR.',
+    sigBody:'¿Tienes un problema que vale la pena resolver? ¿Construyendo algo real — un producto, un sistema, un nuevo paradigma? Trabajo con founders, empresas y visionarios que piensan en sistemas. Sin presentaciones. Sin relleno. Solo constructores.',
+    ctaProd:'Quiero construir un producto',
+    ctaInvest:'Inversión / Alianza',
+    ctaAuto:'Necesito automatización AI',
+    footCmd:'ejecutar ./jesustorres --inicio',
+    nlAdv:'Ventaja', nlKai:'Kairos', nlSys:'Sistemas', nlOrb:'Órbita', nlSig:'Señal',
+    mmAdv:'Ventaja', mmKai:'Kairos', mmSys:'Sistemas', mmOrb:'Órbita', mmSig:'Señal',
+    modalLblOverview:'Vista general', modalLblArch:'Arquitectura técnica', modalLblStack:'Stack', modalLblValue:'Valor de negocio',
+    termHdr:'// acceso no autorizado detectado — mentira. bienvenido, arquitecto.',
+    termLines:[
       ['cmd','> whoami'],['out','  jesustorres — constructor, trader, arquitecto, 38'],
-      ['cmd','> ls /sistemas'],['out','  bot_trading/  web3/  linux_os/  domotica/  cibersec/  self/'],
+      ['cmd','> ls /proyectos'],['out','  uxuri/  mkt/  roBit/  kairos/  worldmonitor/  yumm/  bot_trading/'],
+      ['cmd','> cat /stack'],['out','  Next.js · Go · Python · C/C++ · Claude API · ESP32 · Buildroot · Web3'],
+      ['cmd','> kairos --resumen'],['out','  153 docs indexados · 3 backends · corre local · memoria persistente'],
       ['cmd','> cat /etc/filosofia'],['out','  "Los sistemas no fallan. Los arquitectos sí."'],
       ['cmd','> ping mundo --count 1'],['out','  64 bytes desde mundo: icmp_seq=38 ttl=64 time=0.38ms'],
       ['out','  // casa: confirmada. estado: construyendo.'],['cmd','> _'],
@@ -545,142 +1029,357 @@ const T = {
   }
 };
 
-let lang = 'en';
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+let lang  = localStorage.getItem('jt-lang')  || 'en';
+let theme = localStorage.getItem('jt-theme') || 'dark';
+let kairosPlayed = false;
 
-function setLang(l) {
-  lang = l;
-  const t = T[l];
-  document.getElementById('btn-en').classList.toggle('active', l==='en');
-  document.getElementById('btn-es').classList.toggle('active', l==='es');
-  document.getElementById('eyebrow').textContent        = t.eyebrow;
-  document.getElementById('hero-stmt').textContent      = t.heroStmt;
-  document.getElementById('scroll-lbl').textContent     = t.scrollLbl;
-  document.getElementById('lbl-manifesto').textContent  = t.lblManifesto;
-  document.getElementById('stmt-title').innerHTML       = t.stmtTitle;
-  document.getElementById('stmt-body').innerHTML        = t.stmtBody;
-  document.getElementById('lbl-systems').textContent    = t.lblSystems;
-  document.getElementById('sd-01').textContent          = t.sd01;
-  document.getElementById('sd-02').textContent          = t.sd02;
-  document.getElementById('sd-03').textContent          = t.sd03;
-  document.getElementById('sd-04').textContent          = t.sd04;
-  document.getElementById('sd-05').textContent          = t.sd05;
-  document.getElementById('sd-06').textContent          = t.sd06;
-  document.getElementById('phil-q').innerHTML           = t.philQ;
-  document.getElementById('phil-s').innerHTML           = t.philS;
-  document.getElementById('lbl-orbit').textContent      = t.lblOrbit;
-  document.getElementById('pd-01').textContent          = t.pd01;
-  document.getElementById('pd-02').textContent          = t.pd02;
-  document.getElementById('pd-03').textContent          = t.pd03;
-  document.getElementById('pd-04').textContent          = t.pd04;
-  document.getElementById('pd-05').textContent          = t.pd05;
-  document.getElementById('ps-01').textContent          = t.ps01;
-  document.getElementById('ps-02').textContent          = t.ps02;
-  document.getElementById('ps-03').textContent          = t.ps03;
-  document.getElementById('ps-04').textContent          = t.ps04;
-  document.getElementById('ps-05').textContent          = t.ps05;
-  document.getElementById('lbl-signal').textContent     = t.lblSignal;
-  document.getElementById('sig-title').innerHTML        = t.sigTitle;
-  document.getElementById('sig-body').textContent       = t.sigBody;
-  document.getElementById('foot-cmd').textContent       = t.footCmd;
-  document.getElementById('nl-sys').textContent         = t.nlSys;
-  document.getElementById('nl-phi').textContent         = t.nlPhi;
-  document.getElementById('nl-orb').textContent         = t.nlOrb;
+/* ════════════════════════════════════════════
+   THEME
+════════════════════════════════════════════ */
+function applyTheme(t) {
+  theme = t;
+  document.body.classList.toggle('light', t === 'light');
+  localStorage.setItem('jt-theme', t);
+  const half = document.getElementById('theme-half');
+  if (half) half.setAttribute('d', t === 'dark' ? 'M7 1.5 A5.5 5.5 0 0 1 7 12.5 Z' : 'M7 1.5 A5.5 5.5 0 0 0 7 12.5 Z');
+}
+function toggleTheme() { applyTheme(theme === 'dark' ? 'light' : 'dark'); }
+applyTheme(theme);
+
+/* ════════════════════════════════════════════
+   MOBILE MENU
+════════════════════════════════════════════ */
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const burger = document.getElementById('hamburger');
+  const isOpen = menu.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-// ── NAV ──
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+/* ════════════════════════════════════════════
+   RENDER DYNAMIC SECTIONS
+════════════════════════════════════════════ */
+function renderAdv(l) {
+  const rows = ADV_ROWS[l];
+  const t = T[l];
+  document.getElementById('adv-rows').innerHTML = rows.map(r => `
+    <div class="adv-row">
+      <div class="adv-cell label">${r.label}</div>
+      <div class="adv-cell trad">${r.trad}</div>
+      <div class="adv-cell jt">${r.jt}</div>
+    </div>
+  `).join('');
+}
 
-// ── REVEAL ──
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e,i) => {
-    if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'), i*80); obs.unobserve(e.target); }
+function renderUC(l) {
+  const cases = UC_CASES[l];
+  document.getElementById('uc-grid').innerHTML = cases.map(c => `
+    <div class="uc-card" data-num="${c.n}">
+      <span class="uc-sym">${c.sym}</span>
+      <div class="uc-card-title">${c.title}</div>
+      <p class="uc-card-desc">${c.desc}</p>
+      <div class="uc-example">${c.example}</div>
+    </div>
+  `).join('');
+}
+
+function renderStack(l) {
+  const groups = STACK_GROUPS[l];
+  document.getElementById('stack-grid').innerHTML = groups.map(g => `
+    <div class="stack-group">
+      <div class="stack-cat">${g.cat}</div>
+      ${g.items.map(item => {
+        const featured = item.includes('★');
+        const label = item.replace(' ★','').replace('★','');
+        return `<div class="stack-item${featured?' featured':''}">${label}</div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function renderProjects(l) {
+  const projects = PROJECTS[l];
+  document.getElementById('proj-list').innerHTML = projects.map(p => `
+    <div class="proj-row" onclick="openModal('${p.id}')">
+      <span class="proj-num">${p.num}</span>
+      <div class="proj-info">
+        <h3>${p.title}</h3>
+        <p>${p.tagline}</p>
+      </div>
+      <span class="proj-status${p.on?' on':''}">${p.status}</span>
+      <span class="proj-arrow">→</span>
+    </div>
+  `).join('');
+}
+
+/* ════════════════════════════════════════════
+   LANG
+════════════════════════════════════════════ */
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('jt-lang', l);
+  const t = T[l];
+
+  ['btn-en','mm-btn-en'].forEach(id => document.getElementById(id)?.classList.toggle('active', l==='en'));
+  ['btn-es','mm-btn-es'].forEach(id => document.getElementById(id)?.classList.toggle('active', l==='es'));
+
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.innerHTML = val; };
+  set('eyebrow',      t.eyebrow);
+  set('hero-stmt',    t.heroStmt);
+  set('scroll-lbl',   t.scrollLbl);
+  set('lbl-manifesto',t.lblManifesto);
+  set('stmt-title',   t.stmtTitle);
+  set('stmt-body',    t.stmtBody);
+  set('lbl-adv',      t.lblAdv);
+  set('adv-title',    t.advTitle);
+  set('adv-sub',      t.advSub);
+  set('adv-note',     t.advNote);
+  set('adv-h1',       t.advH1);
+  set('adv-h2',       t.advH2);
+  set('adv-h3',       t.advH3);
+  set('lbl-kai',      t.lblKai);
+  set('kai-badge-txt',t.kaiBadge);
+  set('kai-title',    t.kaiTitle);
+  set('kai-desc',     t.kaiDesc);
+  set('kai-quote',    t.kaiQuote);
+  set('ks-l1',t.ksL1); set('ks-d1',t.ksD1);
+  set('ks-l2',t.ksL2); set('ks-d2',t.ksD2);
+  set('ks-l3',t.ksL3); set('ks-d3',t.ksD3);
+  set('ks-l4',t.ksL4); set('ks-d4',t.ksD4);
+  set('kt-hdr-txt',   t.ktHdr);
+  set('lbl-uc',       t.lblUc);
+  set('uc-title',     t.ucTitle);
+  set('uc-intro',     t.ucIntro);
+  set('lbl-systems',  t.lblSystems);
+  set('sd-01',t.sd01); set('sd-02',t.sd02); set('sd-03',t.sd03);
+  set('sd-04',t.sd04); set('sd-05',t.sd05); set('sd-06',t.sd06);
+  set('lbl-stack-sec',t.lblStackSec);
+  set('phil-q',       t.philQ);
+  set('phil-s',       t.philS);
+  set('lbl-orbit',    t.lblOrbit);
+  set('lbl-signal',   t.lblSignal);
+  set('sig-title',    t.sigTitle);
+  set('sig-body',     t.sigBody);
+  set('cta-p-txt',    t.ctaProd);
+  set('cta-i-txt',    t.ctaInvest);
+  set('cta-a-txt',    t.ctaAuto);
+  set('foot-cmd',     t.footCmd);
+
+  set('nl-adv',t.nlAdv); set('nl-kai',t.nlKai); set('nl-sys',t.nlSys); set('nl-orb',t.nlOrb); set('nl-sig',t.nlSig);
+  set('mm-adv',t.mmAdv); set('mm-kai',t.mmKai); set('mm-sys',t.mmSys); set('mm-orb',t.mmOrb); set('mm-sig',t.mmSig);
+
+  set('lbl-overview', t.modalLblOverview);
+  set('lbl-tech-arch',t.modalLblArch);
+  set('lbl-stack',    t.modalLblStack);
+  set('lbl-value',    t.modalLblValue);
+
+  // CTA href
+  const ctaMap = {
+    'cta-product': `mailto:torresdevmx@gmail.com?subject=${encodeURIComponent(t.ctaProd)}`,
+    'cta-invest':  `mailto:torresdevmx@gmail.com?subject=${encodeURIComponent(t.ctaInvest)}`,
+    'cta-auto':    `mailto:torresdevmx@gmail.com?subject=${encodeURIComponent(t.ctaAuto)}`,
+  };
+  Object.entries(ctaMap).forEach(([id,href]) => { const el=document.getElementById(id); if(el) el.href=href; });
+
+  renderAdv(l);
+  renderUC(l);
+  renderStack(l);
+  renderProjects(l);
+
+  kairosPlayed = false;
+  playKairosIfVisible();
+}
+
+/* ════════════════════════════════════════════
+   KAIROS TERMINAL ANIMATION
+════════════════════════════════════════════ */
+function playKairosTerminal() {
+  if (kairosPlayed) return;
+  kairosPlayed = true;
+  const body = document.getElementById('kt-body');
+  body.innerHTML = '';
+  const lines = KAIROS_TERM[lang];
+  lines.forEach(([ type, text ], i) => {
+    const el = document.createElement('div');
+    el.className = `kt-line ${type}`;
+    el.textContent = text;
+    body.appendChild(el);
+    setTimeout(() => el.classList.add('vis'), 120 + i * 160);
   });
-}, {threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
 
-// ── GLOW PARALLAX ──
-document.addEventListener('mousemove', e => {
-  const g = document.getElementById('glow');
-  g.style.transform = `translate(calc(-50% + ${(e.clientX/innerWidth-.5)*60}px), calc(-50% + ${(e.clientY/innerHeight-.5)*60}px))`;
+function playKairosIfVisible() {
+  const section = document.getElementById('kairos');
+  if (!section) return;
+  const rect = section.getBoundingClientRect();
+  if (rect.top < window.innerHeight * 0.8) playKairosTerminal();
+}
+
+/* ════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════ */
+function openModal(id) {
+  const p = PROJECTS[lang].find(x => x.id === id);
+  if (!p) return;
+  const t = T[lang];
+
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-sub').textContent = p.tagline;
+  const statusEl = document.getElementById('modal-status');
+  statusEl.textContent = p.status;
+  statusEl.className = 'modal-status' + (p.on ? ' on' : '');
+
+  document.getElementById('lbl-overview').textContent = t.modalLblOverview;
+  document.getElementById('lbl-tech-arch').textContent = t.modalLblArch;
+  document.getElementById('lbl-stack').textContent = t.modalLblStack;
+  document.getElementById('lbl-value').textContent = t.modalLblValue;
+
+  document.getElementById('modal-simple').textContent = p.simple;
+  document.getElementById('modal-technical').textContent = p.technical;
+  document.getElementById('modal-tags').innerHTML = p.tech.map(tag => `<span class="modal-tag">${tag}</span>`).join('');
+  document.getElementById('modal-usecase').textContent = p.usecase;
+
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ════════════════════════════════════════════
+   NAV
+════════════════════════════════════════════ */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', scrollY > 60);
+  playKairosIfVisible();
 });
 
-// ── GLITCH ──
+/* ════════════════════════════════════════════
+   REVEAL
+════════════════════════════════════════════ */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('in'), i * 80);
+      revealObs.unobserve(e.target);
+      if (e.target.closest('#kairos')) playKairosTerminal();
+    }
+  });
+}, { threshold: 0.1 });
+
+/* ════════════════════════════════════════════
+   GLOW PARALLAX
+════════════════════════════════════════════ */
+document.addEventListener('mousemove', e => {
+  const g = document.getElementById('glow');
+  if (g) g.style.transform = `translate(calc(-50% + ${(e.clientX/innerWidth-.5)*60}px), calc(-50% + ${(e.clientY/innerHeight-.5)*60}px))`;
+});
+
+/* ════════════════════════════════════════════
+   GLITCH
+════════════════════════════════════════════ */
 const hn = document.getElementById('hero-name');
 let gt = null;
-hn.addEventListener('mouseenter', () => { hn.classList.add('glitch'); gt = setTimeout(()=>hn.classList.remove('glitch'), 600); });
+hn.addEventListener('mouseenter', () => { hn.classList.add('glitch'); gt = setTimeout(() => hn.classList.remove('glitch'), 600); });
 hn.addEventListener('mouseleave', () => { clearTimeout(gt); hn.classList.remove('glitch'); });
 
-// ── TERMINAL ──
+/* ════════════════════════════════════════════
+   TERMINAL
+════════════════════════════════════════════ */
 function openTerm() {
   const t = T[lang];
-  const hdr = document.getElementById('term-hdr');
+  document.getElementById('term-hdr').textContent = t.termHdr;
   const body = document.getElementById('term-body');
-  hdr.textContent = t.termHdr;
   body.innerHTML = '';
   t.termLines.forEach(([type, text], i) => {
     const el = document.createElement('div');
-    el.className = 'term-line ' + (type==='cmd' ? 'term-cmd' : 'term-out');
-    el.style.animationDelay = (i*110)+'ms';
+    el.className = 'term-line ' + (type === 'cmd' ? 'term-cmd' : 'term-out');
+    el.style.animationDelay = (i * 100) + 'ms';
     el.textContent = text;
     body.appendChild(el);
   });
   document.getElementById('terminal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-function closeTerm() { document.getElementById('terminal').classList.remove('open'); }
+function closeTerm() {
+  document.getElementById('terminal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-// ── KONAMI ──
+/* ════════════════════════════════════════════
+   KONAMI + MATRIX
+════════════════════════════════════════════ */
 const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let ki = 0;
-// ── MATRIX ──
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 let mActive = false, mFrame = null, mTimer = null;
 
 function startMatrix() {
-  mActive = true;
-  canvas.classList.add('on');
+  mActive = true; canvas.classList.add('on');
   canvas.width = innerWidth; canvas.height = innerHeight;
-  const cols = Math.floor(innerWidth/16);
+  const cols = Math.floor(innerWidth / 16);
   const drops = Array(cols).fill(1);
-  const chars = 'JESÚSTORRES01アイウカサタナハ';
+  const chars = 'JESÚSTORRES01アイウカサタナハKAIROS';
   function draw() {
     ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    drops.forEach((y,i) => {
+    drops.forEach((y, i) => {
       ctx.fillStyle = i%7===0 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
       ctx.font = '14px monospace';
       ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*16, y*16);
-      if(y*16 > canvas.height && Math.random()>0.975) drops[i]=0;
+      if(y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
       drops[i]++;
     });
     if(mActive) mFrame = requestAnimationFrame(draw);
   }
-  draw();
-  mTimer = setTimeout(stopMatrix, 4000);
+  draw(); mTimer = setTimeout(stopMatrix, 4000);
 }
 function stopMatrix() {
-  mActive=false; canvas.classList.remove('on');
+  mActive = false; canvas.classList.remove('on');
   cancelAnimationFrame(mFrame); ctx.clearRect(0,0,canvas.width,canvas.height); clearTimeout(mTimer);
 }
 
-// ── NAME CLICK × 5 ──
 let nc = 0;
-hn.addEventListener('click', ()=>{ if(++nc>=5){ nc=0; openTerm(); } });
+hn.addEventListener('click', () => { if(++nc >= 5) { nc = 0; openTerm(); } });
 
 document.addEventListener('keydown', e => {
-  ki = e.key===konami[ki] ? ki+1 : 0;
-  if(ki===konami.length){ ki=0; openTerm(); return; }
-  if(e.key==='Escape') closeTerm();
+  ki = e.key === konami[ki] ? ki+1 : 0;
+  if(ki === konami.length) { ki = 0; openTerm(); return; }
+  if(e.key === 'Escape') { closeTerm(); closeModal(); }
   if((e.key==='m'||e.key==='M') && !document.getElementById('terminal').classList.contains('open'))
     mActive ? stopMatrix() : startMatrix();
 });
 
-// ── CONSOLE EGG ──
+/* ════════════════════════════════════════════
+   CONSOLE EGG
+════════════════════════════════════════════ */
 console.log(
-  '%c\n     ██╗████████╗\n     ██║╚══██╔══╝\n     ██║   ██║\n██   ██║   ██║\n╚█████╔╝   ██║\n ╚════╝    ╚═╝\n\n  JESÚS TORRES\n  systems don\'t fail.\n  architects do.\n\n  // 24.0277°N  104.6532°W\n  // status: building\n  // update: 270226 \n ',
-  'font-family:monospace;color:#fff;font-size:11px;line-height:1.4'
+  '%c\n     ██╗████████╗\n     ██║╚══██╔══╝\n     ██║   ██║\n██   ██║   ██║\n╚█████╔╝   ██║\n ╚════╝    ╚═╝\n\n  JESÚS TORRES\n  systems don\'t fail. architects do.\n\n  // 24.0277°N  104.6532°W  · Durango, MX\n  // kairos: running · builds: in progress\n  // reach out → torresdevmx@gmail.com\n ',
+  'font-family:monospace;color:#fff;font-size:11px;line-height:1.4;background:#000;padding:12px;'
 );
-console.log('%c// found the source. respect. reach out → torresdevmx@gmail.com', 'font-family:monospace;color:rgba(255,255,255,0.4);font-size:10px');
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+setLang(lang);
+
+// observe reveals after render
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+}, 50);
 </script>
 </body>
 </html>
