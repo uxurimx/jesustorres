@@ -421,9 +421,16 @@ footer { padding: 40px 48px; border-top: 1px solid var(--line); display: flex; j
 
 @media (max-width: 480px) {
   .stack-grid { grid-template-columns: 1fr; }
-  .kairos-stats { grid-template-columns: 1fr 1fr; }
   .adv-table-hdr, .adv-row { grid-template-columns: 1.2fr 1fr 1fr; }
   .adv-cell { font-size: 12px; }
+}
+@media (max-width: 390px) {
+  .kairos-stats { grid-template-columns: 1fr; }
+  .kai-stat { border-bottom: 1px solid var(--line); }
+  #kairos::before { display: none; }
+  .adv-table-hdr, .adv-row { grid-template-columns: 1fr 1fr 1fr; }
+  .adv-cell.label { font-size: 9px; letter-spacing: 0; }
+  .adv-cell { font-size: 11px; }
 }
 </style>
 </head>
@@ -748,28 +755,28 @@ footer { padding: 40px 48px; border-top: 1px solid var(--line); display: flex; j
       <p class="sig-body" id="sig-body">Have a problem worth solving? Building something real — a product, a system, a new paradigm? I work with founders, companies, and visionaries who think in systems. No pitches. No small talk. Just builders.</p>
     </div>
     <div class="reveal">
-      <a class="contact-line" href="mailto:torresdevmx@gmail.com">
+      <a class="contact-line" href="mailto:jesus@torresdev.mx">
         <span class="c-label">Email</span>
-        <span class="c-value">torresdevmx@gmail.com</span>
+        <span class="c-value">jesus@torresdev.mx</span>
       </a>
-      <a class="contact-line" href="https://github.com/torresdevmx" target="_blank" rel="noopener">
+      <!-- <a class="contact-line" href="https://github.com/torresdevmx" target="_blank" rel="noopener">
         <span class="c-label">GitHub</span>
-        <span class="c-value">github.com/torresdevmx</span>
+        <span class="c-value">github.com/torresdevmx</span> -->
       </a>
       <a class="contact-line" href="https://t.me/torresdevmx" target="_blank" rel="noopener">
         <span class="c-label">Telegram</span>
         <span class="c-value">@torresdevmx</span>
       </a>
       <div class="cta-group" style="margin-top:32px;">
-        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=I want to build a product&body=Hi Jesús, I want to build:" id="cta-product">
+        <a class="cta-btn" href="mailto:jesus@torresdev.mx?subject=I want to build a product&body=Hi Jesús, I want to build:" id="cta-product">
           <span id="cta-p-txt">I want to build a product</span>
           <span>→</span>
         </a>
-        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=Investment / Partnership&body=Hi Jesús, I'm interested in:" id="cta-invest">
+        <a class="cta-btn" href="mailto:jesus@torresdev.mx?subject=Investment / Partnership&body=Hi Jesús, I'm interested in:" id="cta-invest">
           <span id="cta-i-txt">Investment / Partnership</span>
           <span>→</span>
         </a>
-        <a class="cta-btn" href="mailto:torresdevmx@gmail.com?subject=I need AI automation&body=Hi Jesús, I need to automate:" id="cta-auto">
+        <a class="cta-btn" href="mailto:jesus@torresdev.mx?subject=I need AI automation&body=Hi Jesús, I need to automate:" id="cta-auto">
           <span id="cta-a-txt">I need AI automation</span>
           <span>→</span>
         </a>
