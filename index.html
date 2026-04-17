@@ -212,7 +212,7 @@ section { padding: 120px 48px; border-top: 1px solid var(--line); }
 .kairos-desc { font-size: 15px; line-height: 1.85; color: var(--muted-hi); margin-top: 24px; max-width: 400px; }
 .kairos-quote { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.1em; margin-top: 32px; line-height: 1.7; padding-left: 16px; border-left: 2px solid var(--line); }
 .kairos-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 32px; }
-.kai-stat { background: var(--bg); padding: 24px 20px; }
+.kai-stat { background: var(--bg); padding: 24px 20px; min-width: 0; overflow-wrap: break-word; word-break: break-word; }
 .kai-stat-n { font-family: var(--display); font-size: 40px; letter-spacing: 0.04em; line-height: 1; }
 .kai-stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 .kai-stat-desc { font-size: 12px; line-height: 1.6; color: var(--muted); margin-top: 8px; }
@@ -415,22 +415,45 @@ footer { padding: 40px 48px; border-top: 1px solid var(--line); display: flex; j
   #terminal { padding: 48px 24px; }
   .term-close { top: 16px; right: 24px; }
 
+  /* tablets: kairos 2 cols still ok */
   .kairos-stats { grid-template-columns: 1fr 1fr; }
   #kairos::before { font-size: 100px; right: -10px; opacity: 0.5; }
 }
 
+/* ── PHONES ≤ 640px (all phones, portrait) ── */
+@media (max-width: 640px) {
+  .kairos-stats { grid-template-columns: 1fr; }
+  #kairos::before { display: none; }
+  .kai-stat { border-bottom: 1px solid var(--line); }
+  .kairos-terminal { font-size: 11px; }
+  .kt-line { font-size: 11px; line-height: 1.9; }
+  .uc-grid { grid-template-columns: 1fr; }
+  .systems-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SMALL PHONES ≤ 480px (S8+, Pixel 4a, iPhone SE) ── */
 @media (max-width: 480px) {
   .stack-grid { grid-template-columns: 1fr; }
   .adv-table-hdr, .adv-row { grid-template-columns: 1.2fr 1fr 1fr; }
   .adv-cell { font-size: 12px; }
+  .kai-stat-n { font-size: 32px; }
+  .kai-stat { padding: 20px 16px; }
+  .modal-tag { font-size: 8px; padding: 4px 8px; }
 }
-@media (max-width: 390px) {
-  .kairos-stats { grid-template-columns: 1fr; }
-  .kai-stat { border-bottom: 1px solid var(--line); }
-  #kairos::before { display: none; }
+
+/* ── VERY SMALL ≤ 380px (S8+ 360px, Galaxy A) ── */
+@media (max-width: 380px) {
+  #hero, section, .phil-wrap { padding-left: 16px; padding-right: 16px; }
   .adv-table-hdr, .adv-row { grid-template-columns: 1fr 1fr 1fr; }
-  .adv-cell.label { font-size: 9px; letter-spacing: 0; }
   .adv-cell { font-size: 11px; }
+  .adv-cell.label { font-size: 8px; letter-spacing: 0; }
+  .adv-hdr-cell { font-size: 8px; }
+  .proj-row { grid-template-columns: 32px 1fr auto; gap: 8px; }
+  .proj-info h3 { font-size: 20px; }
+  .sig-title { font-size: 40px; }
+  .uc-card { padding: 28px 20px; }
+  .modal-head { padding: 20px; }
+  .modal-body { padding: 20px; }
 }
 </style>
 </head>
